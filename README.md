@@ -46,40 +46,40 @@ Outputs:
 
 **Structure** 
 In the directory "*Functions/*" are located:
-    - "*a_model_functions.c*"
-        - Contains tree structure used throughout computation
-        - Contains necessary functions used for later computation of modellized values
-    - "*b_extract_data_and_memory.c*":
-        - Imports "*a_model_functions*" as a module.
-        - Contains function reading the data and saving it to an array as well as all necessary functions regarding memory allocation and liberation.
-    - "*c_c_to_py.c*" --> we don't need that anymore
-    - "*d_grid_functions.c*":
-        - Imports "*b_extract_data_and_memory.c*" as a module.
-        - Contains functions computing the data for the final grid cells.
-    - "*e_filter_trees.py*":
-        - Reads in multiple csv such as "*Data/conversion_factor.csv*", "*EF.csv*", "*MIR.csv*" and "*shading_coeff.csv*". 
-        - Contains functions that filter through first array and create second array of tree displaying scientific data, while adding that data to the array.
-    - "*g_pyfunctions.py*":
-        - Contains functions to transform a c_POINTER(c_POINTER(double)) to a two-dimensional np.array.
-    - "*h_structures.py*":
-        -Contains structures used in python.
-    - "*main.c*":
-        - Imports "*d_grid_functions.c*" as a module.
-        - File that's used to create the shared library between Python and C.
-        - Contains two functions, that are called from Python. Performs all necessary computations, by calling functions defined in mentioned files.
-        - Writes data from "*SIPV_ICA_ARBRE_ISOLE.csv*" to "*Results/trees_GE.txt*"
+- "*a_model_functions.c*"
+    - Contains tree structure used throughout computation
+    - Contains necessary functions used for later computation of modellized values
+- "*b_extract_data_and_memory.c*":
+    - Imports "*a_model_functions*" as a module.
+    - Contains function reading the data and saving it to an array as well as all necessary functions regarding memory allocation and liberation.
+- "*c_c_to_py.c*" --> we don't need that anymore
+- "*d_grid_functions.c*":
+    - Imports "*b_extract_data_and_memory.c*" as a module.
+    - Contains functions computing the data for the final grid cells.
+- "*e_filter_trees.py*":
+    - Reads in multiple csv such as "*Data/conversion_factor.csv*", "*EF.csv*", "*MIR.csv*" and "*shading_coeff.csv*". 
+    - Contains functions that filter through first array and create second array of tree displaying scientific data, while adding that data to the array.
+- "*g_pyfunctions.py*":
+    - Contains functions to transform a c_POINTER(c_POINTER(double)) to a two-dimensional np.array.
+- "*h_structures.py*":
+    -Contains structures used in python.
+- "*main.c*":
+    - Imports "*d_grid_functions.c*" as a module.
+    - File that's used to create the shared library between Python and C.
+    - Contains two functions, that are called from Python. Performs all necessary computations, by calling functions defined in mentioned files.
+    - Writes data from "*SIPV_ICA_ARBRE_ISOLE.csv*" to "*Results/trees_GE.txt*"
 
 In the main directory are located:
-    - "*execution_file_windows.py*": 
-        - Main execution file for windows
-        - Calls "*Functions/main.c*" as a module using a shared library 
-        - Implements functins written in C and calls them from python
-        - Contains parameters that can be changed as wished.
-        - Writes a summary to "*Results/summary.txt*".
-        - Plots results and saves graphs to "*Results/*".
-    - "*execution_file_mac.py*": 
-        - Main execution file for MacOS
-        - Performs same tasks as "*execution_file_windows.py*".
+- "*execution_file_windows.py*": 
+    - Main execution file for windows
+    - Calls "*Functions/main.c*" as a module using a shared library 
+    - Implements functins written in C and calls them from python
+    - Contains parameters that can be changed as wished.
+    - Writes a summary to "*Results/summary.txt*".
+    - Plots results and saves graphs to "*Results/*".
+- "*execution_file_mac.py*": 
+    - Main execution file for MacOS
+    - Performs same tasks as "*execution_file_windows.py*".
 
 ## Instructions
 
