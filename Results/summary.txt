@@ -1,0 +1,9 @@
+Concentration of PM10 in microgrammes per m^3 : 15.2
+Concentration of Ozone in microgrammes per m^3: 48.09
+Amount of trees analyzed: 30000
+Size of grid cells: 100
+Amount of trees used for calculations: 24463
+Total amount of ozone emitted: 27627.857804406438 kg/y 
+ Total amount of PM10 absorbed: 906.0928439507851 kg/y 
+Total amount of ozone absorbed: 1118542.9448184257 kg/y
+Run time: 183.34800148010254s
