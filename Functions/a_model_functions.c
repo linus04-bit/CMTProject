@@ -26,7 +26,7 @@ struct Tree {
     double shading_factor;        // no units, %
     double conversion_factor;     // g/m2
     int leaves_days;              // days         // 365 if evergreen, 183 if deciduous
-    double stomatal_conductance;  // mol(water vapor)/m2/s   // species-specific stomatal conductance to water vapor 
+    double stomatal_conductance;  // mmol(water vapor)/m2/s   // species-specific stomatal conductance to water vapor 
 
     double mass_emission_factor[3]; // ug(VOC)/gdw/h  // VOC = Volatile Organic Compound  // gdw: grams of leaf dry weight 
                                     // mass_emission_factor[0] : isoprene
@@ -174,7 +174,7 @@ double O3_instantaneous_func(struct Tree * tree, double conc_O3_city) {
     double ppb_O3 = pow(10, 9) * (conc_O3 * molar_volume) / mw_O3;     // ppb, nmol(O3)/mol(air)
 
     // Calculation of the instantaneous stomatal O3 flux
-    double O3_instantaneous = stomatal_conductance * ppb_O3 * 0.613;
+    double O3_instantaneous = stomatal_conductance* pow(10, -3) * ppb_O3 * 0.613;
 
     // Adding the calculated instantaneous stomatal O3 flux to the tree structure
     tree->O3_instantaneous = O3_instantaneous;

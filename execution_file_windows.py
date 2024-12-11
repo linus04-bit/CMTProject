@@ -27,7 +27,7 @@ clibrary = ctypes.CDLL(os.path.join(path, 'Functions/main.dll'))
 C_PM10= 15.2 #Concentration of PM10 --> Kofel: 16.99 (2019)
 C_O3 = 48.09 #Concentration of Ozone --> Kofel: 44.786 (2019)
 gridsize = 100 #Size of the fields over which we calculate the output
-NR_LINES_GE =30000 #Amount of data taken into account from the csv file
+NR_LINES_GE =60000 #Amount of data taken into account from the csv file
 #----------------------------------------------------------------------------------------------------
 summary = open("Results/summary.txt", "w")
 summary.write(f"Concentration of PM10 in microgrammes per m^3 : {C_PM10}\n") 
@@ -210,9 +210,9 @@ grid_O3_np=c_pp_to_np(rows, cols, grid_O3)
 OFP_tot = np.sum(grid_OFP_np)
 PM10_tot = np.sum(grid_PM10_np)
 O3_tot = np.sum(grid_O3_np)
-summary.write(f"Total amount of ozone emitted: {OFP_tot} kg/y \n ")
-summary.write(f"Total amount of PM10 absorbed: {PM10_tot} kg/y \n")
-summary.write(f"Total amount of ozone absorbed: {O3_tot} kg/y\n")
+summary.write(f"Total amount of ozone emitted: {OFP_tot} kg/y\n")
+summary.write(f"Total amount of PM10 absorbed: {PM10_tot} kg/y\n")
+summary.write(f"Total net ozone absorbed(+)/emitted(-): {O3_tot} kg/y\n")
 
 #Create colormap from existing colormap:
 original_cmap = plt.get_cmap('YlOrRd')
@@ -225,7 +225,7 @@ modified_cmap = ListedColormap(colors)
 
 # OFP #
 plt.figure(1)
-plt.imshow(grid_OFP_np, origin='lower', cmap=modified_cmap, interpolation='nearest')
+plt.imshow(grid_OFP_np, origin='lower', cmap='viridis', interpolation='nearest')
 plt.title("OFP(kg/y) - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
@@ -234,7 +234,7 @@ plt.savefig(f'Results/OFP_map_{NR_LINES_GE}_indices.png')
 
 plt.clf()
 plt.figure(2)
-plt.imshow(coordinate_grid(grid_OFP_np, gridsize) , origin='lower', cmap=modified_cmap, interpolation='nearest') 
+plt.imshow(coordinate_grid(grid_OFP_np, gridsize) , origin='lower', cmap='viridis', interpolation='nearest') 
 plt.title("OFP (kg/y) - grid based on real coordinates")
 plt.xlabel("x index")
 plt.ylabel("y index")
@@ -265,7 +265,7 @@ plt.savefig(f'Results/PM10_map_{NR_LINES_GE}.png')
 
 plt.clf()
 plt.figure(1)
-plt.imshow(grid_O3_np, origin='lower', cmap='viridis', interpolation= 'nearest')
+plt.imshow(grid_O3_np, origin='lower', cmap='YlOrRd', interpolation= 'nearest')
 plt.title("O3 (kg/y) - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
@@ -275,7 +275,7 @@ plt.clf()
 
 plt.clf()
 plt.figure(2)
-plt.imshow(coordinate_grid(grid_O3_np, gridsize), origin='lower', cmap='viridis', interpolation= 'nearest') 
+plt.imshow(coordinate_grid(grid_O3_np, gridsize), origin='lower', cmap='YlOrRd', interpolation= 'nearest') 
 plt.title("O3 (kg/y) - grid based on real coordinates")
 plt.xlabel("x index")
 plt.ylabel("y index")

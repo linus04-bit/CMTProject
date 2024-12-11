@@ -95,7 +95,7 @@ int readwriteDocument(char* filename, struct Tree *trees, int size_org){
 
                 if(strcmp(type,"Feuillus") == 0){
                     trees[index].leaves_days = 183;
-                    trees[index].stomatal_conductance = 72.837; //table
+                    trees[index].stomatal_conductance = 72.637; //table
                 }
                 if(strcmp(type,"Conifères") == 0){
                     trees[index].leaves_days = 365;
