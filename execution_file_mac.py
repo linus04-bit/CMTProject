@@ -228,7 +228,7 @@ plt.savefig(f'Results/OFP_map_{NR_LINES_GE}_indices.png')
 
 plt.clf()
 plt.figure(2)
-plt.imshow(coordinate_grid(grid_OFP_np, gridsize) , origin='lower', cmap=modified_cmap, interpolation='nearest') 
+plt.imshow(coordinate_grid(grid_OFP_np, gridsize) , origin='lower', cmap='copper', interpolation='nearest') 
 plt.title("OFP (kg/y) - grid based on real coordinates")
 plt.xlabel("x index")
 plt.ylabel("y index")

@@ -31,11 +31,14 @@ Inputs:
 - "*Data/shading_coeff.csv.*" is a semicolon-delimited file.
 
 Outputs: 
-- "*Results/OFP_map_amount_of_trees_indices*" is a figure depicting the yearly ozone forming potential distribution within the canton depending on the indices.
-"*Results/OFP_map_amount_of_trees*" is a figure depicting the yearly ozone forming potential distribution within the canton in coordinates. 
-- "*Results/PM10_map_amount_of_trees_indices*" is a figure depicting the yearly PM10 uptake distribution within the canton depending on indices.
-"*Results/PM10_map_amount_of_trees*" is a figure depicting the yearly PM10 uptake distribution within the canton in coordinates.
-- "*Results/Figure_Ozone_Uptake*" is a figure depicting the yearly net ozone uptake distribution within the canton.
+- "*Results/OFP_{map_amount_of_trees}_indices.png*" is a figure depicting the yearly ozone forming potential distribution within the canton depending on the grid indices.
+"*Results/OFP_{map_amount_of_trees}.png*" is a figure depicting the yearly ozone forming potential distribution within the canton in coordinates. 
+- "*Results/PM10_{map_amount_of_trees_indices}.png*" is a figure depicting the yearly PM10 uptake distribution within the canton depending on grid indices.
+"*Results/PM10_map_{amount_of_trees}.png*" is a figure depicting the yearly PM10 uptake distribution within the canton in coordinates.
+- "*Results/O3_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly ozone uptake distribution within the canton depending on the grid indices.
+- "*Results/O3_map_{amount_of_trees}.png*" is a figure depicting the yearly ozone uptake distribution within the canton in coordinates.
+- "*Results/O3_net_uptake_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly net ozone uptake distribution within the canton depending on the grid indices.
+- "*Results/O3_net_uptake_map_{amount_of_trees}.png*" is a figure depicting the yearly net ozone uptake distribution within the canton in coordinates.
 - "*/Results/summary.txt*" contains summary of parameters used and the total values computed, as well as the runtime of the program.
 - "*Results/trees_GE.csv*" is a semicolon-delimited file. It contains the first information regarding the trees within our scope of our analysis. It serves as control file and can be deleted as used.
 
@@ -161,3 +164,6 @@ Certain variables, such as "*gridsize*" or "*leaves_days*", as well as  computat
 
 ## Usage of AI
 Artificial Intelligence such as ChatGPT(Version: GPT-4V (Vision) architecture) and Microsoft Copilot (Version: Microsoft Copilot, powered by GPT-4. (2024)) was used in this project. The main use concerned explaining certain code, such as the implementation of *ctypes*, and debugging of code. The function "*my_strndup*", located in "*Functions/b_extract_data_and_memory*", was entirely created by ChatGPT.
+
+## Reflection and Outlook
+This program is strongly restricted by memory and time. This problem could be solved by using pandas instead of simple string comparison in the file "*/Functions/e_filter_trees.py*", such that the program runs faster and all of the data could be taken into account. The decision of using Ctypes in our python execution file helped us to run other computations very fast and dynamically allocate memory. This choice is therefore justified and recommendable. Moreover, one could decide to implement a computation for a two dimensional normal distribution or a latin hypercurbe in */Functions/b_extract_data_and_memory*" to calculate missing values for measured height and crown diameter.
