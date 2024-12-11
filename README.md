@@ -143,7 +143,7 @@ and deleting all but the necessary packages.
 ## Credits
 
 ## Data
-The data file "*SIPV_ICA_ARBRE_ISOLE.csv*" comes from [La Territoire Genevois à la Carte](https://ge.ch/sitg/sitg_catalog/sitg_donnees?keyword=&geodataid=4571&topic=tous&service=tous&datatype=tous&distribution=tous&sort=auto#) 
+The data file "*SIPV_ICA_ARBRE_ISOLE.csv*" comes from [Le Territoire Genevois à la Carte](https://ge.ch/sitg/sitg_catalog/sitg_donnees?keyword=&geodataid=4571&topic=tous&service=tous&datatype=tous&distribution=tous&sort=auto#) 
 
 The data file "*conversion_factor.csv*" was created using data from [US Department of Agriculture, Appendix 4](https://www.fs.usda.gov/nrs/pubs/gtr/gtr-nrs200-2021_appendixes/gtr_nrs200-2021_appendix4.pdf)
 
