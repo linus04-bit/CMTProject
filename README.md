@@ -1,7 +1,7 @@
 # Computational Methods and Tools - Project: Ozone and PM10 absorbtion by Trees in Canton of Geneva
 
 
-## Project describtion
+## Project Description
 
 Given a certain ozone and PM10 concentration, this program displays graphically the yearly ozone forming potential (OFP), the uptake of PM10 as well as the net ozone uptake of the trees located within the canton of Geneva.
 
@@ -38,7 +38,7 @@ Outputs:
 - "*Results/trees_GE.csv*" is a semicolon-delimited file. It contains the first information regarding the trees within our scope of our analysis. It serves as control file and can be deleted as used.
 
 
-## Implementation details
+## Implementation Details
 - Python calls a function in C reading the data provided by the canton and saving the data in the form of an array in Python.
 - Python filters through the file by creating a new array and adding certain parameters to it.
 - Python calls function in C computing the necessary values.
