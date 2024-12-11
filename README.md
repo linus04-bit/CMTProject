@@ -92,6 +92,7 @@ To reproduce the results depicted in the report, the following steps should be i
     ```
 
 2. Compile the shared C library using one of the following commands:
+
     For Windows: 
     ```
     gcc -shared -o main.dll main.c
@@ -103,15 +104,15 @@ To reproduce the results depicted in the report, the following steps should be i
 
     ```
 
-3. Navigate back to the main root directory: 
+4. Navigate back to the main root directory: 
     ```
     cd .. 
 
     ```
 
-4. Open the file "*execution_file_windows.py*" (Windows) or "*execution_file_mac.py*" (MacOS). The file contains commented instructions for the user to modify certain input parameters. Modify as desired and save the file. The values by default correspond to the values used in the report.
+5. Open the file "*execution_file_windows.py*" (Windows) or "*execution_file_mac.py*" (MacOS). The file contains commented instructions for the user to modify certain input parameters. Modify as desired and save the file. The values by default correspond to the values used in the report.
 
-5. The above mentioned file can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*":
+6. The above mentioned file can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*":
     ```
     python3 .\execution_file_windows.py
 
