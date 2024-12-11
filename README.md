@@ -31,7 +31,7 @@ Inputs:
 - "*Data/shading_coeff.csv.*" is a semicolon-delimited file.
 
 Outputs: 
-- " *Results/Figure_OFP*" is a figure depicting the yearly ozone forming potential distribution within the canton. #shall we put amount of trees in filename?
+- "*Results/Figure_OFP*" is a figure depicting the yearly ozone forming potential distribution within the canton. #shall we put amount of trees in filename?
 - "*Results/Figure_PM10_Uptake*" is a figure depicting the yearly PM10 uptake distribution within the canton.
 - "*Results/Figure_Ozone_Uptake*" is a figure depicting the yearly net ozone uptake distribution within the canton.
 - "*/Results/summary.txt*" contains summary of parameters used and the total values computed, as well as the runtime of the program.
