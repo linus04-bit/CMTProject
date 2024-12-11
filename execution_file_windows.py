@@ -4,7 +4,6 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 import time
-from scipy.sparse import csr_matrix #scipy library needs to be installed(Do we still need that?)
 
 from Functions.h_structures import *
 from Functions.e_filter_trees import *
@@ -85,6 +84,7 @@ filepath = ctypes.c_char_p(str_to_filepath.encode(encoding="utf-8"))
 grid_OFP = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))()
 grid_PM10 = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))()
 grid_O3 = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))()
+grid_O3_net_uptake = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))()
 length_y = ctypes.c_int(0)
 length_x = ctypes.c_int(0)
 #---------------------------------------------------------------------------------------------------------------------
@@ -169,6 +169,7 @@ main_func2.argtypes = [ctypes.POINTER(size_filtered_trees*Tree),
                         ctypes.POINTER(ctypes.POINTER(ctypes.POINTER(ctypes.c_double))),
                         ctypes.POINTER(ctypes.POINTER(ctypes.POINTER(ctypes.c_double))),
                         ctypes.POINTER(ctypes.POINTER(ctypes.POINTER(ctypes.c_double))),
+                        ctypes.POINTER(ctypes.POINTER(ctypes.POINTER(ctypes.c_double))),
                         ctypes.POINTER(ctypes.c_int),
                         ctypes.POINTER(ctypes.c_int),
                         ctypes.c_double,
@@ -184,6 +185,7 @@ main_func2(
     ctypes.byref(grid_OFP),
     ctypes.byref(grid_PM10),
     ctypes.byref(grid_O3),
+    ctypes.byref(grid_O3_net_uptake),
     ctypes.byref(length_y),
     ctypes.byref(length_x),
     C_PM10,
@@ -206,13 +208,16 @@ cols = length_x.value
 grid_OFP_np = c_pp_to_np(rows, cols, grid_OFP)
 grid_PM10_np = c_pp_to_np(rows, cols, grid_PM10)
 grid_O3_np=c_pp_to_np(rows, cols, grid_O3)
+grid_O3_net_uptake_np = c_pp_to_np(rows, cols, grid_O3_net_uptake)
 #-----Calculate total amounts------------------------
 OFP_tot = np.sum(grid_OFP_np)
 PM10_tot = np.sum(grid_PM10_np)
 O3_tot = np.sum(grid_O3_np)
+O3_net_uptake_tot = np.sum(grid_O3_net_uptake_np)
 summary.write(f"Total amount of ozone emitted: {OFP_tot} kg/y\n")
 summary.write(f"Total amount of PM10 absorbed: {PM10_tot} kg/y\n")
-summary.write(f"Total net ozone absorbed(+)/emitted(-): {O3_tot} kg/y\n")
+summary.write(f"Total amount of ozone absorbed: {O3_tot} kg/y \n")
+summary.write(f"Total net ozone absorbed(+)/emitted(-): {O3_net_uptake_tot} kg/y\n")
 
 #Create colormap from existing colormap:
 original_cmap = plt.get_cmap('YlOrRd')
@@ -261,12 +266,31 @@ plt.ylabel("y index")
 plt.colorbar(label = "PM10 values")
 plt.savefig(f'Results/PM10_map_{NR_LINES_GE}.png')
 
-# O3 #
+#O3_uptake
+plt.clf()
+plt.figure(1)
+plt.imshow(grid_O3_np, origin='lower', cmap='viridis', interpolation='nearest')
+plt.title("O3 absorbed (kg/y) - grid based on indices")
+plt.xlabel("x index")
+plt.ylabel("y index")
+plt.colorbar(label = "O3 values")
+plt.savefig(f'Results/O3_map_{NR_LINES_GE}_indices.png')
+
+plt.clf()
+plt.figure(2)
+plt.imshow(coordinate_grid(grid_O3_np, gridsize), origin='lower', cmap='viridis', interpolation='nearest') 
+plt.title("O3 absorbed (kg/y) - grid based on real coordinates")
+plt.xlabel("x index")
+plt.ylabel("y index")
+plt.colorbar(label = "O3 values")
+plt.savefig(f'Results/O3_map_{NR_LINES_GE}.png')
+
+# O3__net_uptake #
 
 plt.clf()
 plt.figure(1)
-plt.imshow(grid_O3_np, origin='lower', cmap='YlOrRd', interpolation= 'nearest')
-plt.title("O3 (kg/y) - grid based on indices")
+plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='YlOrRd', interpolation= 'nearest')
+plt.title("Net O3 (kg/y) - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
 plt.colorbar(label = "O3 values")
@@ -275,8 +299,8 @@ plt.clf()
 
 plt.clf()
 plt.figure(2)
-plt.imshow(coordinate_grid(grid_O3_np, gridsize), origin='lower', cmap='YlOrRd', interpolation= 'nearest') 
-plt.title("O3 (kg/y) - grid based on real coordinates")
+plt.imshow(coordinate_grid(grid_O3_net_uptake_np, gridsize), origin='lower', cmap='YlOrRd', interpolation= 'nearest') 
+plt.title("Net O3 (kg/y) - grid based on real coordinates")
 plt.xlabel("x index")
 plt.ylabel("y index")
 plt.colorbar(label = "O3 values")
@@ -284,6 +308,7 @@ plt.savefig(f'Results/O3_uptake_map_{NR_LINES_GE}.png')
 print("This was the last grid. We are done here:).")
 #-------------------------------------free memory-----------------------------------------------
 free_grid(grid_O3)
+free_grid(grid_O3_net_uptake)
 free_grid(grid_OFP)
 free_grid(grid_PM10)
 end = time.time()

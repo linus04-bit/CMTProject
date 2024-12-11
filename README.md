@@ -3,14 +3,14 @@
 
 ## Project Description
 
-Given a certain ozone and PM10 concentration, this program displays graphically the yearly ozone forming potential (OFP), the uptake of PM10 as well as the net ozone uptake of the trees located within the canton of Geneva.
+Given a certain ozone and PM10 concentration, this program displays graphically the yearly ozone forming potential (OFP), the uptake of PM10 and ozone as well as the net ozone uptake of the trees located within the canton of Geneva.
 
 This program will:
 1. Read in data concerning the location as well as certain properties of the trees located within the canton of Geneva. This data is provided by *Le Système d’Information du Territoire à Genève (SITG)*
 2. Filter through the data and add scientific data necessary for the following calculations. Tree species, for which no data was found, were discarded.
 3. Compute the yearly ozone forming potential, PM10 uptake and net ozone uptake aggregated over 100mx100m grid cells.
-4. Calculate total OFP, total uptake of PM10 and total net uptake of ozone.
-5. Display the found results graphically and save them as .jpg files.
+4. Calculate total OFP, total uptake of PM10 and ozone and total net uptake of ozone.
+5. Display the found results graphically and save them as .png files.
 
 
 ## Project Structure
@@ -31,8 +31,10 @@ Inputs:
 - "*Data/shading_coeff.csv.*" is a semicolon-delimited file.
 
 Outputs: 
-- "*Results/Figure_OFP*" is a figure depicting the yearly ozone forming potential distribution within the canton. #shall we put amount of trees in filename?
-- "*Results/Figure_PM10_Uptake*" is a figure depicting the yearly PM10 uptake distribution within the canton.
+- "*Results/OFP_map_amount_of_trees_indices*" is a figure depicting the yearly ozone forming potential distribution within the canton depending on the indices.
+"*Results/OFP_map_amount_of_trees*" is a figure depicting the yearly ozone forming potential distribution within the canton in coordinates. 
+- "*Results/PM10_map_amount_of_trees_indices*" is a figure depicting the yearly PM10 uptake distribution within the canton depending on indices.
+"*Results/PM10_map_amount_of_trees*" is a figure depicting the yearly PM10 uptake distribution within the canton in coordinates.
 - "*Results/Figure_Ozone_Uptake*" is a figure depicting the yearly net ozone uptake distribution within the canton.
 - "*/Results/summary.txt*" contains summary of parameters used and the total values computed, as well as the runtime of the program.
 - "*Results/trees_GE.csv*" is a semicolon-delimited file. It contains the first information regarding the trees within our scope of our analysis. It serves as control file and can be deleted as used.
@@ -53,7 +55,6 @@ In the directory "*Functions/*" are located:
 - "*b_extract_data_and_memory.c*":
     - Imports "*a_model_functions*" as a module.
     - Contains function reading the data and saving it to an array as well as all necessary functions regarding memory allocation and liberation.
-- "*c_c_to_py.c*" --> we don't need that anymore
 - "*d_grid_functions.c*":
     - Imports "*b_extract_data_and_memory.c*" as a module.
     - Contains functions computing the data for the final grid cells.

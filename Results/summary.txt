@@ -5,4 +5,6 @@ Size of grid cells: 100
 Amount of trees used for calculations: 48873
 Total amount of ozone emitted: 57596.14574772982 kg/y
 Total amount of PM10 absorbed: 1934.5621941375898 kg/y
-Total amount of ozone absorbed: -55169.23264515012 kg/y
+Total amount of ozone absorbed: 2421.1225427895056 kg/y 
+Total net ozone absorbed(+)/emitted(-): -55175.0232049403 kg/y
+Run time: 467.98880767822266s

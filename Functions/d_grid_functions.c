@@ -84,12 +84,13 @@ int distance(double* points, int size_trees_array, int gridsize){
 // we need to do a predefine 2D-array of 
 //size_trees_array [distance in y/gridsize][distance in x/gridsize]
 
-void calculations(int size_trees_array_filtered_trees, int length_y,int length_x, double** grid_OFP, double** grid_PM10, double** grid_O3_uptake, struct Tree *trees, double Ci_City, double conc_O3_city, int gridsize){
+void calculations(int size_trees_array_filtered_trees, int length_y,int length_x, double** grid_OFP, double** grid_PM10, double** grid_O3, double** grid_O3_net_uptake, struct Tree *trees, double Ci_City, double conc_O3_city, int gridsize){
     printf("Gridsize: %d\n", gridsize);
     for(int i = 0; i < length_y; i++){
         for(int j = 0; j<length_x; j++){
             double OFP_tot = 0.0;
             double PM_tot = 0.0;
+            double O3_uptake_tot = 0.0;
             double O3_net_uptake_tot = 0.0;
             for(int k = 0; k<size_trees_array_filtered_trees; k++){
                 if((trees[k].position_x_grid <=j*gridsize+gridsize && trees[k].position_x_grid >=j*gridsize) &&(trees[k].position_y_grid >=i*gridsize && trees[k].position_y_grid <= i*gridsize+ gridsize)){
@@ -105,6 +106,7 @@ void calculations(int size_trees_array_filtered_trees, int length_y,int length_x
                     O3_yearly_func(&trees[k]);
                     O3_removal_yearly_func(&trees[k]);
                     O3_removed_mass_yearly_func(&trees[k]);
+                    O3_uptake_tot += trees[k].O3_removed_mass_yearly;
                     O3_net_uptake_yearly_func(&trees[k]);
                     O3_net_uptake_tot += trees[k].O3_net_uptake_yearly;
                 }
@@ -112,8 +114,9 @@ void calculations(int size_trees_array_filtered_trees, int length_y,int length_x
             // add values to field in grid
             grid_OFP[i][j] = OFP_tot*pow(10, -9);
             grid_PM10[i][j] = PM_tot;
-            grid_O3_uptake[i][j] = O3_net_uptake_tot*pow(10,-3);
-        //printf("%f\n", grid_O3_uptake[i][j]);
+            grid_O3[i][j] = O3_uptake_tot *pow(10,-3);
+            grid_O3_net_uptake[i][j] = O3_net_uptake_tot*pow(10,-3);
+        //printf("%f\n", grid_O3_net_uptake[i][j]);
     }
     }
 }

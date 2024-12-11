@@ -41,7 +41,7 @@ void main_function1(char* filename, struct Tree *trees, int size_org){
 // - Concentration of O3 in the city
 // - gridsize, chosen to be = 100, can be seen in execution_file
 
-void main_function2(struct Tree * filtered_trees, int size_filtered_trees, double *** grid_OFP, double *** grid_PM10, double ***grid_O3, int* length_y, int* length_x, double C_PM10, double C_O3, int gridsize ){
+void main_function2(struct Tree * filtered_trees, int size_filtered_trees, double *** grid_OFP, double *** grid_PM10, double *** grid_O3, double ***grid_O3_net_uptake, int* length_y, int* length_x, double C_PM10, double C_O3, int gridsize ){
     //---------------------memory allocation part II----------
     double * x = calloc(size_filtered_trees, sizeof(double));
     double * y = calloc(size_filtered_trees, sizeof(double)); 
@@ -62,9 +62,10 @@ void main_function2(struct Tree * filtered_trees, int size_filtered_trees, doubl
     *grid_OFP = get_gridarray(*length_y, *length_x);
     *grid_PM10 = get_gridarray(*length_y, *length_x);
     *grid_O3 = get_gridarray(*length_y, *length_x);
+    *grid_O3_net_uptake = get_gridarray(*length_y, *length_x);
     printf("Grids got created\n");
     //Do calculations within the grid
-    calculations(size_filtered_trees, *length_y, *length_x, *grid_OFP, *grid_PM10, *grid_O3, filtered_trees, C_PM10, C_O3, gridsize);
+    calculations(size_filtered_trees, *length_y, *length_x, *grid_OFP, *grid_PM10,*grid_O3, *grid_O3_net_uptake, filtered_trees, C_PM10, C_O3, gridsize);
     printf("Calculations are done\n");
     //----------------------------------------------------------------------------------------
 
