@@ -1,7 +1,7 @@
 # Computational Methods and Tools - Project: Ozone and PM10 absorbtion by Trees in Canton of Geneva
 
 
-## Project describtion
+## Project Description
 
 Given a certain ozone and PM10 concentration, this program displays graphically the yearly ozone forming potential (OFP), the uptake of PM10 as well as the net ozone uptake of the trees located within the canton of Geneva.
 
@@ -9,7 +9,7 @@ This program will:
 1. Read in data concerning the location as well as certain properties of the trees located within the canton of Geneva. This data is provided by *Le Système d’Information du Territoire à Genève (SITG)*
 2. Filter through the data and add scientific data necessary for the following calculations. Tree species, for which no data was found, were discarded.
 3. Compute the yearly ozone forming potential, PM10 uptake and net ozone uptake aggregated over 100mx100m grid cells.
-4. Calculates total OFP, total uptake of PM10 and total net uptake of ozone.
+4. Calculate total OFP, total uptake of PM10 and total net uptake of ozone.
 5. Display the found results graphically and save them as .jpg files.
 
 
@@ -26,25 +26,26 @@ This program will:
 Inputs:
 - "*Data/SIPV_ICA_ARBRE_ISOLE.csv*" is a semicolon-delimited file.
 - "*Data/conversion_factor.csv*" is a semicolon-delimited file.
-- "*Data/EF-csv*" is a semicolon-delimited file.
+- "*Data/EF.csv*" is a semicolon-delimited file.
 - "*Data/MIR.csv*" is a semicolon-delimited file.
 - "*Data/shading_coeff.csv.*" is a semicolon-delimited file.
 
 Outputs: 
-- " *Results/Figure_OFP*" is a figure depicting the yearly ozone forming potential distribution within the canton. #shall we put amount of trees in filename?
+- "*Results/Figure_OFP*" is a figure depicting the yearly ozone forming potential distribution within the canton. #shall we put amount of trees in filename?
 - "*Results/Figure_PM10_Uptake*" is a figure depicting the yearly PM10 uptake distribution within the canton.
 - "*Results/Figure_Ozone_Uptake*" is a figure depicting the yearly net ozone uptake distribution within the canton.
 - "*/Results/summary.txt*" contains summary of parameters used and the total values computed, as well as the runtime of the program.
 - "*Results/trees_GE.csv*" is a semicolon-delimited file. It contains the first information regarding the trees within our scope of our analysis. It serves as control file and can be deleted as used.
 
 
-## Implementation details
+## Implementation Details
 - Python calls a function in C reading the data provided by the canton and saving the data in the form of an array in Python.
 - Python filters through the file by creating a new array and adding certain parameters to it.
 - Python calls function in C computing the necessary values.
 - Python takes care of the visualisation.
 
-**Structure** 
+**Structure**
+
 In the directory "*Functions/*" are located:
 - "*a_model_functions.c*"
     - Contains tree structure used throughout computation
@@ -91,6 +92,7 @@ To reproduce the results depicted in the report, the following steps should be i
     ```
 
 2. Compile the shared C library using one of the following commands:
+
     For Windows: 
     ```
     gcc -shared -o main.dll main.c
@@ -102,15 +104,15 @@ To reproduce the results depicted in the report, the following steps should be i
 
     ```
 
-3. Navigate back to the main root directory: 
+4. Navigate back to the main root directory: 
     ```
     cd .. 
 
     ```
 
-4. Open the file "*execution_file_windows.py*" (Windows) or "*execution_file_mac.py*" (MacOS). The file contains commented instructions for the user to modify certain input parameters. Modify as desired and save the file. The values by default correspond to the values used in the report.
+5. Open the file "*execution_file_windows.py*" (Windows) or "*execution_file_mac.py*" (MacOS). The file contains commented instructions for the user to modify certain input parameters. Modify as desired and save the file. The values by default correspond to the values used in the report.
 
-5. The above mentioned file can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*":
+6. The above mentioned file can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*":
     ```
     python3 .\execution_file_windows.py
 
@@ -141,20 +143,20 @@ and deleting all but the necessary packages.
 ## Credits
 
 ## Data
-The data file "*SIPV_ICA_ARBRE_ISOLE.csv*" comes from [La Territoire Genevois à la Carte](https://ge.ch/sitg/sitg_catalog/sitg_donnees?keyword=&geodataid=4571&topic=tous&service=tous&datatype=tous&distribution=tous&sort=auto#) 
+The data file "*SIPV_ICA_ARBRE_ISOLE.csv*" comes from [Le Territoire Genevois à la Carte](https://ge.ch/sitg/sitg_catalog/sitg_donnees?keyword=&geodataid=4571&topic=tous&service=tous&datatype=tous&distribution=tous&sort=auto#). 
 
-The data file "*conversion_factor.csv*" was created using data from [US Department of Agriculture, Appendix 4](https://www.fs.usda.gov/nrs/pubs/gtr/gtr-nrs200-2021_appendixes/gtr_nrs200-2021_appendix4.pdf)
+The data file "*conversion_factor.csv*" was created using data from [US Department of Agriculture, Appendix 4](https://www.fs.usda.gov/nrs/pubs/gtr/gtr-nrs200-2021_appendixes/gtr_nrs200-2021_appendix4.pdf).
 
-The data files "*EF.csv*" and "*MIR.csv*" were created using data from ["*Quantifying the impact of urban trees on air quality in Geneva, Switzerland*", Kofel et al, EPFL 2023](https://infoscience.epfl.ch/entities/publication/40973cec-92bd-4171-b671-817c28a88f64)
+The data files "*EF.csv*" and "*MIR.csv*" were created using data from ["*Quantifying the impact of urban trees on air quality in Geneva, Switzerland*", Kofel et al, EPFL 2023](https://infoscience.epfl.ch/entities/publication/40973cec-92bd-4171-b671-817c28a88f64).
 
-The data file "*shading_coeff.csv*" was created using data from [US Departement of Agriculture, Appendix 3](https://www.fs.usda.gov/nrs/pubs/gtr/gtr-nrs200-2021_appendixes/gtr_nrs200-2021_appendix3.pdf)
+The data file "*shading_coeff.csv*" was created using data from [US Departement of Agriculture, Appendix 3](https://www.fs.usda.gov/nrs/pubs/gtr/gtr-nrs200-2021_appendixes/gtr_nrs200-2021_appendix3.pdf).
 
-The concentrations used as a default value in "*execution_file_windows.py*" is from [Canton of Geneva](https://www.ge.ch/connaitre-qualite-air-geneve/donnees-qualite-air-recherches-personnalisees)
+The concentrations used as default values in "*execution_file_windows.py*" are from [Canton of Geneva](https://www.ge.ch/connaitre-qualite-air-geneve/donnees-qualite-air-recherches-personnalisees).
 
 The values used for stomatal conductance come from ["*Representing nighttime and minimum conductance in CLM4.5: global hydrology and carbon sensitivity analysis using observational constraints*", Zeppel et al., 2017](https://www.researchgate.net/publication/312639755/figure/tbl1/AS:668529984544776@1536401377779/Old-and-new-minimum-stomatal-conductance-values-used-in-CLM45SP-Units-are-mmol-m-2-s.png) and can be found in "*Functions/b_extract_data_and_memory"* 
 
 ## Formulae
-Certain variables, such as "*gridsize*" or "*leave_days*", as well as  computations applied in this project come from ["*Quantifying the impact of urban trees on air quality in Geneva, Switzerland*", Kofel et al, EPFL 2023](https://infoscience.epfl.ch/entities/publication/40973cec-92bd-4171-b671-817c28a88f64). 
+Certain variables, such as "*gridsize*" or "*leaves_days*", as well as  computations applied in this project come from ["*Quantifying the impact of urban trees on air quality in Geneva, Switzerland*", Kofel et al, EPFL 2023](https://infoscience.epfl.ch/entities/publication/40973cec-92bd-4171-b671-817c28a88f64). 
 
 ## Usage of AI
-Artificial Intelligence such as ChatGPT(Version: GPT-4V (Vision) architecture) and Microsoft Copilot (Version: Microsoft Copilot, powered by GPT-4. (2024)) was used in this project. The main use concerned explaining certain code, such as the implementation of *ctypes*, and debugging of code. The function "*my_strndup*", located in "*Functions/b_extract_data_and_memory*", was entirely created by ChatGPT.  in this
+Artificial Intelligence such as ChatGPT(Version: GPT-4V (Vision) architecture) and Microsoft Copilot (Version: Microsoft Copilot, powered by GPT-4. (2024)) was used in this project. The main use concerned explaining certain code, such as the implementation of *ctypes*, and debugging of code. The function "*my_strndup*", located in "*Functions/b_extract_data_and_memory*", was entirely created by ChatGPT.
