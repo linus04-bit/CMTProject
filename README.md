@@ -26,7 +26,7 @@ This program will:
 Inputs:
 - "*Data/SIPV_ICA_ARBRE_ISOLE.csv*" is a semicolon-delimited file.
 - "*Data/conversion_factor.csv*" is a semicolon-delimited file.
-- "*Data/EF-csv*" is a semicolon-delimited file.
+- "*Data/EF.csv*" is a semicolon-delimited file.
 - "*Data/MIR.csv*" is a semicolon-delimited file.
 - "*Data/shading_coeff.csv.*" is a semicolon-delimited file.
 
