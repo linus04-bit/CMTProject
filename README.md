@@ -44,7 +44,8 @@ Outputs:
 - Python calls function in C computing the necessary values.
 - Python takes care of the visualisation.
 
-**Structure** 
+**Structure**
+
 In the directory "*Functions/*" are located:
 - "*a_model_functions.c*"
     - Contains tree structure used throughout computation
