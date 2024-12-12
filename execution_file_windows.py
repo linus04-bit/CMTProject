@@ -26,7 +26,7 @@ clibrary = ctypes.CDLL(os.path.join(path, 'Functions/main.dll'))
 C_PM10= 15.2 #Concentration of PM10 --> Kofel: 16.99 (2019)
 C_O3 = 48.09 #Concentration of Ozone --> Kofel: 44.786 (2019)
 gridsize = 100 #Size of the fields over which we calculate the output
-NR_LINES_GE =60000 #Amount of data taken into account from the csv file
+NR_LINES_GE =120000 #Amount of data taken into account from the csv file
 #----------------------------------------------------------------------------------------------------
 summary = open("Results/summary.txt", "w")
 summary.write(f"Concentration of PM10 in microgrammes per m^3 : {C_PM10}\n") 
