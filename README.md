@@ -3,12 +3,12 @@
 
 ## Project Description
 
-Given a certain ozone and PM10 concentration, this program displays graphically the yearly ozone forming potential (OFP), the uptake of PM10 and ozone as well as the net ozone uptake of the trees located within the canton of Geneva.
+Given a certain ozone and PM10 concentration, this program displays graphically the yearly ozone forming potential (OFP), the uptake of PM10 and ozone as well as the net ozone uptake of the trees located within the canton of Geneva. The net uptake describes the difference between ozone uptake and OFP.
 
 This program will:
 1. Read in data concerning the location as well as certain properties of the trees located within the canton of Geneva. This data is provided by *Le Système d’Information du Territoire à Genève (SITG)*
 2. Filter through the data and add scientific data necessary for the following calculations. Tree species, for which no data was found, were discarded.
-3. Compute the yearly ozone forming potential, PM10 uptake and net ozone uptake aggregated over 100mx100m grid cells.
+3. Compute the yearly ozone forming potential, PM10 and ozone uptake and net ozone uptake aggregated over 100mx100m grid cells.
 4. Calculate total OFP, total uptake of PM10 and ozone and total net uptake of ozone.
 5. Display the found results graphically and save them as .png files.
 
@@ -16,8 +16,8 @@ This program will:
 ## Project Structure
 
 - "*Data*" contains different input files
-- "*Functions*"contains the necessary code in C and Python, as well as the shared library between C and Python. The files in this folder should not be modified.
-- "*Results*" contains the created graphs, a csv file containing the data taken from the first input file, as control tool, and a summary file containing most important informations.
+- "*Functions*"contains the necessary code in C and Python, as well as the shared library between C and Python, once compiled. The files in this folder should not be modified.
+- "*Results*" contains the created graphs, a csv file containing the data taken from the first input file, as control tool, and a summary file containing most important informations, as well as total values of OFP, PM10 and ozone uptake and net ozone uptake.
 - "*execution_file_windows.py*" or "*execution_file_mac.py*" is the python file that can be modified and needs to be run in order to read in the data, compute and display the results. Depending on the operating system, a different file needs to be used ( *execution_file_windows.py* for windows,  *execution_file_mac.py* for MacOS and Linux).
 
 
@@ -31,22 +31,18 @@ Inputs:
 - "*Data/shading_coeff.csv.*" is a semicolon-delimited file.
 
 Outputs: 
-- "*Results/OFP_{map_amount_of_trees}_indices.png*" is a figure depicting the yearly ozone forming potential distribution within the canton depending on the grid indices.
-"*Results/OFP_{map_amount_of_trees}.png*" is a figure depicting the yearly ozone forming potential distribution within the canton in coordinates. 
-- "*Results/PM10_{map_amount_of_trees_indices}.png*" is a figure depicting the yearly PM10 uptake distribution within the canton depending on grid indices.
-"*Results/PM10_map_{amount_of_trees}.png*" is a figure depicting the yearly PM10 uptake distribution within the canton in coordinates.
-- "*Results/O3_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly ozone uptake distribution within the canton depending on the grid indices.
-- "*Results/O3_map_{amount_of_trees}.png*" is a figure depicting the yearly ozone uptake distribution within the canton in coordinates.
-- "*Results/O3_net_uptake_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly net ozone uptake distribution within the canton depending on the grid indices.
-- "*Results/O3_net_uptake_map_{amount_of_trees}.png*" is a figure depicting the yearly net ozone uptake distribution within the canton in coordinates.
-- "*/Results/summary.txt*" contains summary of parameters used and the total values computed, as well as the runtime of the program.
+- "*Results/OFP_{map_amount_of_trees}_indices.png*" is a figure depicting the yearly ozone forming potential distribution within the canton depending on the grid indices. "*Results/OFP_{map_amount_of_trees}.png*" is a figure depicting the yearly ozone forming potential distribution within the canton in coordinates. 
+- "*Results/PM10_{map_amount_of_trees_indices}.png*" is a figure depicting the yearly PM10 uptake distribution within the canton depending on grid indices. "*Results/PM10_map_{amount_of_trees}.png*" is a figure depicting the yearly PM10 uptake distribution within the canton in coordinates.
+- "*Results/O3_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly ozone uptake distribution within the canton depending on the grid indices. "*Results/O3_map_{amount_of_trees}.png*" is a figure depicting the yearly ozone uptake distribution within the canton in coordinates.
+- "*Results/O3_net_uptake_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly net ozone uptake distribution within the canton depending on the grid indices. "*Results/O3_net_uptake_map_{amount_of_trees}.png*" is a figure depicting the yearly net ozone uptake distribution within the canton in coordinates.
+- "*Results/summary.txt*" contains summary of parameters used and the total values computed, as well as the runtime of the program.
 - "*Results/trees_GE.csv*" is a semicolon-delimited file. It contains the first information regarding the trees within our scope of our analysis. It serves as control file and can be deleted as used.
 
 
 ## Implementation Details
 - Python calls a function in C reading the data provided by the canton and saving the data in the form of an array in Python.
-- Python filters through the file by creating a new array and adding certain parameters to it.
-- Python calls function in C computing the necessary values.
+- Python filters through this array by creating a new array and adding certain parameters to it.
+- Python calls function in C that computes the necessary values.
 - Python takes care of the visualisation.
 
 **Structure**
@@ -161,6 +157,8 @@ The values used for stomatal conductance come from ["*Representing nighttime and
 
 ## Formulae
 Certain variables, such as "*gridsize*" or "*leaves_days*", as well as  computations applied in this project come from ["*Quantifying the impact of urban trees on air quality in Geneva, Switzerland*", Kofel et al, EPFL 2023](https://infoscience.epfl.ch/entities/publication/40973cec-92bd-4171-b671-817c28a88f64). 
+
+The formuale used for the calculation of the net ozone uptake comes from ["*FlorTree: A unifying modelling framework for estimating the species-specific pollution removal by individual trees and shrubs, Manzini et al., 2023.*"](https://www.sciencedirect.com/science/article/pii/S1618866723001383)
 
 ## Usage of AI
 Artificial Intelligence such as ChatGPT(Version: GPT-4V (Vision) architecture) and Microsoft Copilot (Version: Microsoft Copilot, powered by GPT-4. (2024)) was used in this project. The main use concerned explaining certain code, such as the implementation of *ctypes*, and debugging of code. The function "*my_strndup*", located in "*Functions/b_extract_data_and_memory*", was entirely created by ChatGPT.
