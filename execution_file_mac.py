@@ -4,7 +4,6 @@ import os
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 import time
-from scipy.sparse import csr_matrix #scipy library needs to be installed(Do we still need that?)
 
 from Functions.h_structures import *
 from Functions.e_filter_trees import *
@@ -24,14 +23,14 @@ clibrary = ctypes.CDLL(os.path.join(path, 'Functions/main.so'))
 
 
 #----------------------------------Fix constant values, can be changed by user-----------------------
-C_PM10= 15.2 #Concentration of PM10
-C_O3 = 48.09 #Concentration of Ozone
+C_PM10= 15.2 #Concentration of PM10 --> Kofel: 16.99 (2019)
+C_O3 = 48.09 #Concentration of Ozone --> Kofel: 44.786 (2019)
 gridsize = 100 #Size of the fields over which we calculate the output
-NR_LINES_GE =30000 #Amount of data taken into account from the csv file
+NR_LINES_GE =120000 #Amount of data taken into account from the csv file
 #----------------------------------------------------------------------------------------------------
 summary = open("Results/summary.txt", "w")
-summary.write(f"Concentration of C_PM10 in mg/m^3 : {C_PM10}\n") 
-summary.write(f"Concentration of Ozone in mg/m^3: {C_O3}\n")
+summary.write(f"Concentration of PM10 in microgrammes per m^3 : {C_PM10}\n") 
+summary.write(f"Concentration of Ozone in microgrammes per m^3: {C_O3}\n")
 summary.write(f"Amount of trees analyzed: {NR_LINES_GE}\n")
 summary.write(f"Size of grid cells: {gridsize}\n")
 #test runtime
@@ -85,6 +84,7 @@ filepath = ctypes.c_char_p(str_to_filepath.encode(encoding="utf-8"))
 grid_OFP = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))()
 grid_PM10 = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))()
 grid_O3 = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))()
+grid_O3_net_uptake = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))()
 length_y = ctypes.c_int(0)
 length_x = ctypes.c_int(0)
 #---------------------------------------------------------------------------------------------------------------------
@@ -169,6 +169,7 @@ main_func2.argtypes = [ctypes.POINTER(size_filtered_trees*Tree),
                         ctypes.POINTER(ctypes.POINTER(ctypes.POINTER(ctypes.c_double))),
                         ctypes.POINTER(ctypes.POINTER(ctypes.POINTER(ctypes.c_double))),
                         ctypes.POINTER(ctypes.POINTER(ctypes.POINTER(ctypes.c_double))),
+                        ctypes.POINTER(ctypes.POINTER(ctypes.POINTER(ctypes.c_double))),
                         ctypes.POINTER(ctypes.c_int),
                         ctypes.POINTER(ctypes.c_int),
                         ctypes.c_double,
@@ -184,6 +185,7 @@ main_func2(
     ctypes.byref(grid_OFP),
     ctypes.byref(grid_PM10),
     ctypes.byref(grid_O3),
+    ctypes.byref(grid_O3_net_uptake),
     ctypes.byref(length_y),
     ctypes.byref(length_x),
     C_PM10,
@@ -197,9 +199,8 @@ free_tree_array2.argtypes = [ctypes.POINTER(size_filtered_trees*Tree)]
 free_tree_array2.restype = None
 
 free_tree_array2(c_filtered_trees)
-#----------------------------------Calculate total amounts------------------------------------------------------
 
-#--------------------------------------visulization-------------------------------------------------------------
+#--------------------------------------affichage----------------------------------------------
 
 #convert Pointer(Pointer(double)) to a 2D array in python.
 rows = length_y.value
@@ -207,77 +208,106 @@ cols = length_x.value
 grid_OFP_np = c_pp_to_np(rows, cols, grid_OFP)
 grid_PM10_np = c_pp_to_np(rows, cols, grid_PM10)
 grid_O3_np=c_pp_to_np(rows, cols, grid_O3)
+grid_O3_net_uptake_np = c_pp_to_np(rows, cols, grid_O3_net_uptake)
+#-----Calculate total amounts------------------------
+OFP_tot = np.sum(grid_OFP_np)
+PM10_tot = np.sum(grid_PM10_np)
+O3_tot = np.sum(grid_O3_np)
+O3_net_uptake_tot = np.sum(grid_O3_net_uptake_np)
+summary.write(f"Total amount of ozone emitted: {OFP_tot} kg/y\n")
+summary.write(f"Total amount of PM10 absorbed: {PM10_tot} kg/y\n")
+summary.write(f"Total amount of ozone absorbed: {O3_tot} kg/y \n")
+summary.write(f"Total net ozone absorbed(+)/emitted(-): {O3_net_uptake_tot} kg/y\n")
 
 #Create colormap from existing colormap:
 original_cmap = plt.get_cmap('YlOrRd')
 N = 256
 colors = original_cmap(np.linspace(0,1,N))
 for i in range(N):
-    if i < 15:  # Replace the first 50 colors (adjust as needed for violet range)
+    if i > 230:  # Replace the first 50 colors (adjust as needed for violet range)
         colors[i] = [1.0, 1.0, 1.0, 1.0]  # RGBA for white
 modified_cmap = ListedColormap(colors)
 
 # OFP #
 plt.figure(1)
-plt.imshow(grid_OFP_np, origin='lower', cmap=modified_cmap, interpolation='nearest')
-plt.title("OFP(kg/y) - grid based on indices")
-plt.xlabel("x index")
-plt.ylabel("y index")
-plt.colorbar(label = "OFP values")
+plt.imshow(grid_OFP_np, origin='lower', cmap='viridis', interpolation='nearest')
+plt.title("Yearly Ozone Forming Potential (OFP) (kg/y) - grid based on indices")
+plt.xlabel("x-index")
+plt.ylabel("y-index")
+plt.colorbar(label = "OFP_yearly values")
 plt.savefig(f'Results/OFP_map_{NR_LINES_GE}_indices.png')
 
 plt.clf()
 plt.figure(2)
-plt.imshow(coordinate_grid(grid_OFP_np, gridsize) , origin='lower', cmap='copper', interpolation='nearest') 
-plt.title("OFP (kg/y) - grid based on real coordinates")
-plt.xlabel("x index")
-plt.ylabel("y index")
-plt.colorbar(label = "OFP values")
+plt.imshow(coordinate_grid(grid_OFP_np, gridsize) , origin='lower', cmap='viridis', interpolation='nearest') 
+plt.title("Yearly Ozone Forming Potential (OFP) (kg/y) - grid based on real coordinates")
+plt.xlabel("x-coordinates")
+plt.ylabel("y-coordinates")
+plt.colorbar(label = "OFP_yearly values")
 plt.savefig(f'Results/OFP_map_{NR_LINES_GE}.png')
 
-# PM10 #
-PM10_ydim, PM10_xdim = grid_PM10_np.shape 
+# PM10 # 
 plt.clf()
 plt.figure(1)
 plt.imshow(grid_PM10_np, origin='lower', cmap='viridis', interpolation='nearest')
-plt.title("PM10 - grid based on indices")
+plt.title("Yearly PM10 Deposition (kg/y) - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
-plt.colorbar(label = "PM10 values")
+plt.colorbar(label = "PM10_yearly values")
 plt.savefig(f'Results/PM10_map_{NR_LINES_GE}_indices.png')
 
 plt.clf()
 plt.figure(2)
 plt.imshow(coordinate_grid(grid_PM10_np, gridsize), origin='lower', cmap='viridis', interpolation='nearest') 
-plt.title("PM10 - grid based on real coordinates")
-plt.xlabel("x index")
-plt.ylabel("y index")
-plt.colorbar(label = "PM10 values")
+plt.title("Yearly PM10 Deposition (kg/y) - grid based on real coordinates")
+plt.xlabel("x-coordinates")
+plt.ylabel("y-coordinates")
+plt.colorbar(label = "PM10_yearly values")
 plt.savefig(f'Results/PM10_map_{NR_LINES_GE}.png')
 
-# O3 #
-
+#O3_uptake
 plt.clf()
 plt.figure(1)
-plt.imshow(grid_O3_np, origin='lower', cmap='viridis', interpolation= 'nearest')
-plt.title("O3 (kg/y) - grid based on indices")
+plt.imshow(grid_O3_np, origin='lower', cmap='viridis', interpolation='nearest')
+plt.title("Yearly amount of O3 absorbed (kg/y) - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
-plt.colorbar(label = "O3 values")
-plt.savefig(f'Results/O3_uptake_map_{NR_LINES_GE}_indices.png')
-plt.clf()
+plt.colorbar(label = "O3_removed_mass values")
+plt.savefig(f'Results/O3_map_{NR_LINES_GE}_indices.png')
 
 plt.clf()
 plt.figure(2)
-plt.imshow(coordinate_grid(grid_O3_np, gridsize), origin='lower', cmap='viridis', interpolation= 'nearest') 
-plt.title("O3 (kg/y) - grid based on real coordinates")
+plt.imshow(coordinate_grid(grid_O3_np, gridsize), origin='lower', cmap='viridis', interpolation='nearest') 
+plt.title("Yearly amount of O3 absorbed (kg/y) - grid based on real coordinates")
+plt.xlabel("x-coordinates")
+plt.ylabel("y-coordinates")
+plt.colorbar(label = "O3_removed_mass values")
+plt.savefig(f'Results/O3_map_{NR_LINES_GE}.png')
+
+# O3__net_uptake #
+
+plt.clf()
+plt.figure(1)
+plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='YlOrRd', interpolation= 'nearest')
+plt.title("Yearly net amount of O3 absorbed (kg/y) - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
-plt.colorbar(label = "O3 values")
-plt.savefig(f'Results/O3_uptake_map_{NR_LINES_GE}.png')
+plt.colorbar(label = "O3_net_removed_mass values")
+plt.savefig(f'Results/O3_net_uptake_map_{NR_LINES_GE}_indices.png')
+
+
+plt.clf()
+plt.figure(2)
+plt.imshow(coordinate_grid(grid_O3_net_uptake_np, gridsize), origin='lower', cmap='YlOrRd', interpolation= 'nearest') 
+plt.title("Yearly net amount of O3 absorbed (kg/y) - grid based on real coordinates")
+plt.xlabel("x-coordinates")
+plt.ylabel("y-coordinates")
+plt.colorbar(label = "O3_net_removed_mass values")
+plt.savefig(f'Results/O3_net_uptake_map_{NR_LINES_GE}.png')
 print("This was the last grid. We are done here:).")
 #-------------------------------------free memory-----------------------------------------------
 free_grid(grid_O3)
+free_grid(grid_O3_net_uptake)
 free_grid(grid_OFP)
 free_grid(grid_PM10)
 end = time.time()
