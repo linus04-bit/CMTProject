@@ -85,7 +85,6 @@ int distance(double* points, int size_trees_array, int gridsize){
 //size_trees_array [distance in y/gridsize][distance in x/gridsize]
 
 void calculations(int size_trees_array_filtered_trees, int length_y,int length_x, double** grid_OFP, double** grid_PM10, double** grid_O3, double** grid_O3_net_uptake, struct Tree *trees, double Ci_City, double conc_O3_city, int gridsize){
-    printf("Gridsize: %d\n", gridsize);
     for(int i = 0; i < length_y; i++){
         for(int j = 0; j<length_x; j++){
             double OFP_tot = 0.0;

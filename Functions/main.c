@@ -57,7 +57,7 @@ void main_function2(struct Tree * filtered_trees, int size_filtered_trees, doubl
     // calculate lengths
     *length_y = distance(y, size_filtered_trees, gridsize);
     *length_x = distance (x, size_filtered_trees, gridsize);
-    printf("These are the gridsizes: %d, %d\n", *length_y, *length_x);
+    printf("These are the lengths of our grid: %d, %d\n", *length_y, *length_x);
     //adjust grid memory to the length we actually need
     *grid_OFP = get_gridarray(*length_y, *length_x);
     *grid_PM10 = get_gridarray(*length_y, *length_x);

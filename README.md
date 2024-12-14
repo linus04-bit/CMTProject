@@ -31,10 +31,10 @@ Inputs:
 - "*Data/shading_coeff.csv.*" is a semicolon-delimited file.
 
 Outputs: 
-- "*Results/OFP_{map_amount_of_trees}_indices.png*" is a figure depicting the yearly ozone forming potential distribution within the canton depending on the grid indices. "*Results/OFP_{map_amount_of_trees}.png*" is a figure depicting the yearly ozone forming potential distribution within the canton in coordinates. 
-- "*Results/PM10_{map_amount_of_trees_indices}.png*" is a figure depicting the yearly PM10 uptake distribution within the canton depending on grid indices. "*Results/PM10_map_{amount_of_trees}.png*" is a figure depicting the yearly PM10 uptake distribution within the canton in coordinates.
-- "*Results/O3_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly ozone uptake distribution within the canton depending on the grid indices. "*Results/O3_map_{amount_of_trees}.png*" is a figure depicting the yearly ozone uptake distribution within the canton in coordinates.
-- "*Results/O3_net_uptake_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly net ozone uptake distribution within the canton depending on the grid indices. "*Results/O3_net_uptake_map_{amount_of_trees}.png*" is a figure depicting the yearly net ozone uptake distribution within the canton in coordinates.
+- "*Results/OFP_{map_amount_of_trees}_indices.png*" is a figure depicting the yearly ozone forming potential distribution within the canton depending on the grid indices. 
+- "*Results/PM10_{map_amount_of_trees_indices}.png*" is a figure depicting the yearly PM10 uptake distribution within the canton depending on grid indices.
+- "*Results/O3_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly ozone uptake distribution within the canton depending on the grid indices.
+- "*Results/O3_net_uptake_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly net ozone uptake distribution within the canton depending on the grid indices.
 - "*Results/summary.txt*" contains summary of parameters used and the total values computed, as well as the runtime of the program.
 - "*Results/trees_GE.csv*" is a semicolon-delimited file. It contains the first information regarding the trees within our scope of our analysis. It serves as control file and can be deleted as used.
 

@@ -13,14 +13,6 @@ def c_pp_to_np( y,  x, grid):
     return grid_np
 
 #-----------------------Function to transfrom grid based on indices into coordinates-----#
-#def coordinate_grid(grid_indices, gridsize, dimy, dimx):
- #   grid_coordinates = np.zeros((dimy*gridsize, dimx*gridsize))
- #   for i in range(dimy*gridsize):
-#        for j in range(dimx*gridsize):
-#            y = int(np.floor(i/gridsize))
-#            x = int(np.floor(j/gridsize))
-#            grid_coordinates[i][j] = grid_indices[y][x]
-#    return grid_coordinates
 def coordinate_grid(grid_indices, gridsize):
-   grid_coordinates = np.kron(grid_indices, np.ones((gridsize, gridsize)))
+   grid_coordinates = np.repeat(np.repeat(grid_indices, gridsize, axis=0), gridsize, axis=1).astype(np.float32)
    return grid_coordinates

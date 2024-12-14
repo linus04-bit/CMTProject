@@ -64,7 +64,6 @@ def filter_trees(trees, filtered_trees, conversion_factor, EF, shading_coeff, MI
         full_species_name = str(trees[i]['species_name'])
         first_species_name = full_species_name.split()[0]
         counts+=1
-        print(counts)
         if first_species_name in names1 and first_species_name in names2 and first_species_name in names3:
             filtered_trees = np.append(filtered_trees, trees[i])
             index1 = names1.index(first_species_name)

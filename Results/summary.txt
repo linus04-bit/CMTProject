@@ -7,4 +7,4 @@ Total amount of ozone emitted: 71294.0903791815 kg/y
 Total amount of PM10 absorbed: 2297.9376063732166 kg/y
 Total amount of ozone absorbed: 2951.8066727562964 kg/y 
 Total net ozone absorbed(+)/emitted(-): -68342.28370642522 kg/y
-Run time: 3317.8842420578003s
+Run time: 1859.1980330944061s

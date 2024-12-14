@@ -3,6 +3,8 @@ import ctypes
 import os
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+from matplotlib.colors import Normalize
+from matplotlib.colors import SymLogNorm
 import time
 
 from Functions.h_structures import *
@@ -219,92 +221,54 @@ summary.write(f"Total amount of PM10 absorbed: {PM10_tot} kg/y\n")
 summary.write(f"Total amount of ozone absorbed: {O3_tot} kg/y \n")
 summary.write(f"Total net ozone absorbed(+)/emitted(-): {O3_net_uptake_tot} kg/y\n")
 
-#Create colormap from existing colormap:
-original_cmap = plt.get_cmap('YlOrRd')
-N = 256
-colors = original_cmap(np.linspace(0,1,N))
-for i in range(N):
-    if i > 230:  # Replace the first 50 colors (adjust as needed for violet range)
-        colors[i] = [1.0, 1.0, 1.0, 1.0]  # RGBA for white
-modified_cmap = ListedColormap(colors)
-
 # OFP #
 plt.figure(1)
-plt.imshow(grid_OFP_np, origin='lower', cmap='viridis', interpolation='nearest')
-plt.title("Yearly Ozone Forming Potential (OFP) (kg/y) - grid based on indices")
+plt.imshow(grid_OFP_np, origin='lower', cmap="YlGnBu", interpolation='nearest', norm = SymLogNorm(linthresh=10, vmin=0, vmax=900))
+plt.title("Yearly Ozone Forming Potential (OFP) (kg/y)\n - grid based on indices")
 plt.xlabel("x-index")
 plt.ylabel("y-index")
-plt.colorbar(label = "OFP_yearly values")
+cbar = plt.colorbar(label = "OFP_yearly values", ticks = [100, 200, 300, 800])
+cbar.ax.set_yticklabels(['100', '200', '300', '800'])
 plt.savefig(f'Results/OFP_map_{NR_LINES_GE}_indices.png')
 
-plt.clf()
-plt.figure(2)
-plt.imshow(coordinate_grid(grid_OFP_np, gridsize) , origin='lower', cmap='viridis', interpolation='nearest') 
-plt.title("Yearly Ozone Forming Potential (OFP) (kg/y) - grid based on real coordinates")
-plt.xlabel("x-coordinates")
-plt.ylabel("y-coordinates")
-plt.colorbar(label = "OFP_yearly values")
-plt.savefig(f'Results/OFP_map_{NR_LINES_GE}.png')
+
 
 # PM10 # 
 plt.clf()
 plt.figure(1)
-plt.imshow(grid_PM10_np, origin='lower', cmap='viridis', interpolation='nearest')
-plt.title("Yearly PM10 Deposition (kg/y) - grid based on indices")
+plt.imshow(grid_PM10_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=1, vmin=0, vmax=5))
+plt.title("Yearly PM10 Deposition (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
-plt.colorbar(label = "PM10_yearly values")
+cbar = plt.colorbar(label = "PM10_yearly values", ticks = [1,2,3,4,5])
+cbar.ax.set_yticklabels(['1', '2', '3', '4', '5'])
 plt.savefig(f'Results/PM10_map_{NR_LINES_GE}_indices.png')
 
-plt.clf()
-plt.figure(2)
-plt.imshow(coordinate_grid(grid_PM10_np, gridsize), origin='lower', cmap='viridis', interpolation='nearest') 
-plt.title("Yearly PM10 Deposition (kg/y) - grid based on real coordinates")
-plt.xlabel("x-coordinates")
-plt.ylabel("y-coordinates")
-plt.colorbar(label = "PM10_yearly values")
-plt.savefig(f'Results/PM10_map_{NR_LINES_GE}.png')
 
 #O3_uptake
 plt.clf()
 plt.figure(1)
-plt.imshow(grid_O3_np, origin='lower', cmap='viridis', interpolation='nearest')
-plt.title("Yearly amount of O3 absorbed (kg/y) - grid based on indices")
+plt.imshow(grid_O3_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=2, vmin=0, vmax=10))
+plt.title("Yearly amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
-plt.colorbar(label = "O3_removed_mass values")
+cbar = plt.colorbar(label = "O3_removed_mass values", ticks = [1,2,3,4,5,6,7,8])
+cbar.ax.set_yticklabels(['1', '2', '3', '4', '5', '6', '7', '8'])
 plt.savefig(f'Results/O3_map_{NR_LINES_GE}_indices.png')
-
-plt.clf()
-plt.figure(2)
-plt.imshow(coordinate_grid(grid_O3_np, gridsize), origin='lower', cmap='viridis', interpolation='nearest') 
-plt.title("Yearly amount of O3 absorbed (kg/y) - grid based on real coordinates")
-plt.xlabel("x-coordinates")
-plt.ylabel("y-coordinates")
-plt.colorbar(label = "O3_removed_mass values")
-plt.savefig(f'Results/O3_map_{NR_LINES_GE}.png')
 
 # O3__net_uptake #
 
 plt.clf()
 plt.figure(1)
-plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='YlOrRd', interpolation= 'nearest')
-plt.title("Yearly net amount of O3 absorbed (kg/y) - grid based on indices")
+plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='afmhot', interpolation= 'nearest',  norm = SymLogNorm(linthresh=10, vmin=-500, vmax=0))
+plt.title("Yearly net amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
-plt.colorbar(label = "O3_net_removed_mass values")
+cbar = plt.colorbar(label = "O3_net_removed_mass values", ticks = [-100, -200, -300, -400, -500, -600, -700, -800])
+cbar.ax.set_yticklabels(['-100', '-200', '-300', '-400', '-500', '-600', '-700', '-800'])
 plt.savefig(f'Results/O3_net_uptake_map_{NR_LINES_GE}_indices.png')
 
-
-plt.clf()
-plt.figure(2)
-plt.imshow(coordinate_grid(grid_O3_net_uptake_np, gridsize), origin='lower', cmap='YlOrRd', interpolation= 'nearest') 
-plt.title("Yearly net amount of O3 absorbed (kg/y) - grid based on real coordinates")
-plt.xlabel("x-coordinates")
-plt.ylabel("y-coordinates")
-plt.colorbar(label = "O3_net_removed_mass values")
-plt.savefig(f'Results/O3_net_uptake_map_{NR_LINES_GE}.png')
-print("This was the last grid. We are done here:).")
+print("This was the last grid.")
 #-------------------------------------free memory-----------------------------------------------
 free_grid(grid_O3)
 free_grid(grid_O3_net_uptake)
@@ -313,6 +277,7 @@ free_grid(grid_PM10)
 end = time.time()
 summary.write(f"Run time: {end- start}s")
 summary.close()
+print("Done")
 #-------------------------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------------------------
