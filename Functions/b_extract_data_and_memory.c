@@ -2,10 +2,15 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include "a_model_functions.c" 
+
 
 #define PI 3.14159265358979323846 
 #define MAX_Line_Length 1024
-#include "a_model_functions.c" 
+#define LEAVE_DAYS_EVERGREENS 365 // Value taken from Kofel, Donato, et al.
+#define LEAVE_DAYS_BROADLEAVES 183 // Value taken from Kofel, Donato, et al.
+#define STOMATAL_COND_EVERGREENS 16.896 //Value taken from Zeppel et al.
+#define STOMATAL_COND_BROADLEAVES 72.637 // Value taken from Zeppel et al.
 
 
 //-----------------------------------------------------------------------------------------------------------------------------
@@ -72,34 +77,23 @@ int readwriteDocument(char* filename, struct Tree *trees, int size_org){
             }
             if(matches == 10){
                 double total_height = atof(my_strndup(line+last_position + 1, position - last_position-1));
-                //arbitrary value, if trunk height or total height is not measured:
-                //if(trunk_height == 0 | total_height ==0){
-                //   trees[index].crown_height = 9;
-                //}
-                //else {trees[index].crown_height = total_height - trunk_height;}
                 trees[index].crown_height = total_height - trunk_height;
             }
             //crown diameter
             if(matches == 11){
                 double value = atof(my_strndup(line+last_position + 1, position - last_position-1));
-                //arbitrary value if not measured:
-                //if(value == 0){
-                //    trees[index].crown_diameter = 4;
-                //}
-                //else {trees[index].crown_diameter = value;}
-                trees[index].crown_diameter = value;
             }
             //Adding attributes depending on if its a evergreen or broadleaf. Values found in table and Kofel
             if(matches == 23){
                 char* type = my_strndup(line+last_position + 1, position - last_position-1);
 
                 if(strcmp(type,"Feuillus") == 0){
-                    trees[index].leaves_days = 183;
-                    trees[index].stomatal_conductance = 72.637; //table
+                    trees[index].leaves_days = LEAVE_DAYS_BROADLEAVES;
+                    trees[index].stomatal_conductance = STOMATAL_COND_BROADLEAVES; 
                 }
                 if(strcmp(type,"Conifères") == 0){
-                    trees[index].leaves_days = 365;
-                    trees[index].stomatal_conductance = 16.896; // table
+                    trees[index].leaves_days = LEAVE_DAYS_EVERGREENS;
+                    trees[index].stomatal_conductance = STOMATAL_COND_EVERGREENS;
                 }
             }
             // postition, coordinate system used is LV95
@@ -158,10 +152,6 @@ int readwriteDocument(char* filename, struct Tree *trees, int size_org){
 }
 //------------------------------------------------------
 
-//-------------------print a point----------------------
-void printTree(struct Tree tree){
-    printf("%s\n", tree.species_name);
-}
 
 //------memory allocation-------------------------------
 //for simple array

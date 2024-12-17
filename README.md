@@ -147,18 +147,18 @@ The data file "*SIPV_ICA_ARBRE_ISOLE.csv*" comes from [Le Territoire Genevois à
 
 The data file "*conversion_factor.csv*" was created using data from [US Department of Agriculture, Appendix 4](https://www.fs.usda.gov/nrs/pubs/gtr/gtr-nrs200-2021_appendixes/gtr_nrs200-2021_appendix4.pdf).
 
-The data files "*EF.csv*" and "*MIR.csv*" were created using data from ["*Quantifying the impact of urban trees on air quality in Geneva, Switzerland*", Kofel et al, EPFL 2023](https://infoscience.epfl.ch/entities/publication/40973cec-92bd-4171-b671-817c28a88f64).
+The data files "*EF.csv*" and "*MIR.csv*" were created using data from ["*Quantifying the impact of urban trees on air quality in Geneva, Switzerland*", Kofel, Donato, et al, EPFL 2023](https://infoscience.epfl.ch/entities/publication/40973cec-92bd-4171-b671-817c28a88f64).
 
 The data file "*shading_coeff.csv*" was created using data from [US Departement of Agriculture, Appendix 3](https://www.fs.usda.gov/nrs/pubs/gtr/gtr-nrs200-2021_appendixes/gtr_nrs200-2021_appendix3.pdf).
 
 The concentrations used as default values in "*execution_file_windows.py*" are from [Canton of Geneva](https://www.ge.ch/connaitre-qualite-air-geneve/donnees-qualite-air-recherches-personnalisees).
 
-The values used for stomatal conductance come from ["*Representing nighttime and minimum conductance in CLM4.5: global hydrology and carbon sensitivity analysis using observational constraints*", Zeppel et al., 2017](https://www.researchgate.net/publication/312639755/figure/tbl1/AS:668529984544776@1536401377779/Old-and-new-minimum-stomatal-conductance-values-used-in-CLM45SP-Units-are-mmol-m-2-s.png) and can be found in "*Functions/b_extract_data_and_memory"* 
+The values used for stomatal conductance come from ["*Representing nighttime and minimum conductance in CLM4.5: global hydrology and carbon sensitivity analysis using observational constraints*", Zeppel, Melanie, et al., 2017](https://www.researchgate.net/publication/312639755/figure/tbl1/AS:668529984544776@1536401377779/Old-and-new-minimum-stomatal-conductance-values-used-in-CLM45SP-Units-are-mmol-m-2-s.png) and can be found in "*Functions/b_extract_data_and_memory"* 
 
 ## Formulae
-Certain variables, such as "*gridsize*" or "*leaves_days*", as well as  computations applied in this project come from ["*Quantifying the impact of urban trees on air quality in Geneva, Switzerland*", Kofel et al, EPFL 2023](https://infoscience.epfl.ch/entities/publication/40973cec-92bd-4171-b671-817c28a88f64). 
+Certain variables, such as "*gridsize*" or "*leaves_days*", as well as  computations applied in this project come from ["*Quantifying the impact of urban trees on air quality in Geneva, Switzerland*", Kofel, Donato, et al, EPFL 2023](https://infoscience.epfl.ch/entities/publication/40973cec-92bd-4171-b671-817c28a88f64). 
 
-The formuale used for the calculation of the net ozone uptake comes from ["*FlorTree: A unifying modelling framework for estimating the species-specific pollution removal by individual trees and shrubs, Manzini et al., 2023.*"](https://www.sciencedirect.com/science/article/pii/S1618866723001383)
+The formuale used for the calculation of the net ozone uptake comes from ["*FlorTree: A unifying modelling framework for estimating the species-specific pollution removal by individual trees and shrubs, Manzini, Jacobo, et al., 2023.*"](https://www.sciencedirect.com/science/article/pii/S1618866723001383)
 
 ## Usage of AI
 Artificial Intelligence such as ChatGPT(Version: GPT-4V (Vision) architecture) and Microsoft Copilot (Version: Microsoft Copilot, powered by GPT-4. (2024)) was used in this project. The main use concerned explaining certain code, such as the implementation of *ctypes*, and debugging of code. The function "*my_strndup*", located in "*Functions/b_extract_data_and_memory*", was entirely created by ChatGPT.
