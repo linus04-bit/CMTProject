@@ -2,6 +2,14 @@
 #include <math.h>
 
 #define PI 3.14159265358979323846 
+#define MW_O3 47.997 // molar weight of O3 in g/mol
+#define MOLAR_VOlUME 0.02445 // molar volume of air at STP in m³/mol
+#define P 12 // photoperiod: approximation of 12 h/day
+#define Vd 0.0064   // m/s           dry deposition velocity of PM10
+#define DIFF_RATIO 0.613 //diffusibility ration between ozone and water vapor
+#define PART_SUSP_RATE 0.5 //particle resuspension rate back to the atmosphere 
+#define STOMATAL_O3_FLUX 0.3 //A stomatal flux of 30% of total potential O3 was considered 
+
 
 //------------------------------------------------------------------------------------------------------------------
 // This file contains the definition of the Tree structure, as well as all functions related to computing the fields
@@ -22,7 +30,7 @@ struct Tree {
     double position_y_grid;
     double position_x_grid;
 
-// From literatur review
+// From literature review
     double shading_factor;        // no units, %
     double conversion_factor;     // g/m2
     int leaves_days;              // days         // 365 if evergreen, 183 if deciduous
@@ -78,7 +86,7 @@ double leaf_area_func(struct Tree * tree) {
     double C = PI * D * (H + D) / 2;            // C is based on the outer surface area of the tree crown.
     
     // Calculation of the leaf area 
-    double ln_LA = -4.33 + 0.29 * H + 0.73 * D + 5.72 * S - 0.01 * C;   // In C (programming language), we use log(x) to calculate ln(x).
+    double ln_LA = -4.33 + 0.29 * H + 0.73 * D + 5.72 * S - 0.01 * C;   // Regression equation
     double LA = exp(ln_LA);
 
     // Adding the calculated leaf area to the tree structure 
@@ -144,13 +152,12 @@ double OFP_yearly_func(struct Tree * tree) {
 
 double PM10_yearly_func(struct Tree * tree, double conc_PM10_city) {
     // Parameters
-    double Vd = 0.0064;                    // m/s           dry deposition velocity of PM10
     double conc_PM10 = conc_PM10_city;     // ug(PM10)/m3   mean yearly PM10 concentration
     double LA = tree->leaf_area;           // m2            total leaf area of a tree   
     int leaves_days = tree->leaves_days;   
     
     // Calculation of the estimation of the yearly PM10 deposition
-    double PM10_yearly = Vd * conc_PM10 * LA * leaves_days * 24 * 3600 * 0.5 * pow(10, -9);
+    double PM10_yearly = Vd * conc_PM10 * LA * leaves_days * 24 * 3600 * PART_SUSP_RATE * pow(10, -9);
     
     // Adding the calculated estimation of the yearly PM10 deposition to the tree structure
     tree->PM10_yearly = PM10_yearly;
@@ -169,12 +176,10 @@ double O3_instantaneous_func(struct Tree * tree, double conc_O3_city) {
     // The following calculation expects an O3 concentration in ppb or nmol(O3)/mol(air).
     // A conversion is necessary:
 
-    double molar_volume = 0.02445;       // molar volume of air at STP in m³/mol
-    double mw_O3 = 47.997;               // molar weight of O3 in g/mol
-    double ppb_O3 = pow(10, 9) * (conc_O3 * molar_volume) / mw_O3;     // ppb, nmol(O3)/mol(air)
+    double ppb_O3 = pow(10, 9) * (conc_O3 * MOLAR_VOlUME) / MW_O3;     // ppb, nmol(O3)/mol(air)
 
     // Calculation of the instantaneous stomatal O3 flux
-    double O3_instantaneous = stomatal_conductance* pow(10, -3) * ppb_O3 * 0.613;
+    double O3_instantaneous = stomatal_conductance* pow(10, -3) * ppb_O3 * DIFF_RATIO;
 
     // Adding the calculated instantaneous stomatal O3 flux to the tree structure
     tree->O3_instantaneous = O3_instantaneous;
@@ -187,11 +192,10 @@ double O3_instantaneous_func(struct Tree * tree, double conc_O3_city) {
 double O3_yearly_func(struct Tree * tree) {
     // Parameters 
     double O3_instantaneous = tree->O3_instantaneous;
-    int p = 12;                                  // photoperiod: approximation of 12 h/day
     int leaves_days = tree->leaves_days;
     
     // Calculation of the total annual cumulated O3 flux
-    double O3_yearly = O3_instantaneous* p * leaves_days * 3600 * pow(10, -9);
+    double O3_yearly = O3_instantaneous* P * leaves_days * 3600 * pow(10, -9);
 
     // Adding the calculated total annual cumulated O3 flux to the tree structure
     tree->O3_yearly = O3_yearly;
@@ -208,7 +212,7 @@ double O3_removal_yearly_func(struct Tree * tree) {
     double O3_yearly = tree->O3_yearly;
 
     // Calculation of the total potential O3 removal
-    double O3_removal_yearly = O3_yearly / 0.3;
+    double O3_removal_yearly = O3_yearly / STOMATAL_O3_FLUX;
 
     // Adding the calculated total potential O3 removal to the tree structure 
     tree->O3_removal_yearly = O3_removal_yearly;
@@ -222,10 +226,9 @@ double O3_removed_mass_yearly_func(struct Tree * tree) {
     // Parameters 
     double O3_removal_yearly = tree->O3_removal_yearly;
     double leaf_area = tree->leaf_area;
-    double mw = 47.997;                    // molar weight of O3 in g/mol
 
     // Calculation of the annual mass of removed O3
-    double O3_removed_mass_yearly = O3_removal_yearly * leaf_area * mw;
+    double O3_removed_mass_yearly = O3_removal_yearly * leaf_area * MW_O3;
 
     // Adding the calculated annual mass of removed O3 to the tree structure
     tree->O3_removed_mass_yearly = O3_removed_mass_yearly;
@@ -238,7 +241,7 @@ double O3_removed_mass_yearly_func(struct Tree * tree) {
 double O3_net_uptake_yearly_func(struct Tree * tree) {
     // Paramaters
     double O3_removed_mass_yearly = tree->O3_removed_mass_yearly;    // g(O3)/y
-    double OFP_yearly = tree->OFP_yearly;                            // ug(O3)/y      // different units !
+    double OFP_yearly = tree->OFP_yearly;                            // ug(O3)/y      
 
     // Calculation of the yearly net ozone uptake
     double O3_net_uptake_yearly = O3_removed_mass_yearly - OFP_yearly * pow(10, -6);   // conversion factor due to the different units
