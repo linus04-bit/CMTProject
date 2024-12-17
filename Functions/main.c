@@ -28,16 +28,13 @@ void main_function1(char* filename, struct Tree *trees, int size_org){
 //----------------------------------------------------------------------------------------
 
 
-//---------------------------------filter in Python--------------------------------------
-//----------------------------------------------------------------------------------------
-
 //----------------------------main function2 calculates the values on the grid-----------
 //Inputs:
 // - Array of filitered tree structures
 // - length of that array
 // - 3x predefined Pointer(Pointer(Pointer(double))) for our grids
 // -Pointer to possible distances in y and x that will be calculated within the function
-// - Concentration of pM10 in the city
+// - Concentration of PM10 in the city
 // - Concentration of O3 in the city
 // - gridsize, chosen to be = 100, can be seen in execution_file
 

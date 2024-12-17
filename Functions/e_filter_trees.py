@@ -1,10 +1,18 @@
 import numpy as np
 import math
 from Functions.h_structures import *
+import ctypes
 
 
+#---------------------------------------------------------------------------------------------------------------------
+#This file contains the function, that filters through our first array and finds for which genus, we have the necessary
+#data. Other trees will be ejected. The function creates a new nd.array
+#This file also contains the function, to change C_POINTERS into 2D arrays for visualization
+#---------------------------------------------------------------------------------------------------------------------
 
 
+#----------------------------------------------------------------------------------------------------------------------
+#This function reads in csv files and calculates average values for each genus present
 def readfile(file_name):
     names_values_dic = {}
 
@@ -21,9 +29,9 @@ def readfile(file_name):
                 names_values_dic[first_name].append(value)#takes a lot of data time
 
             elif n == 3:  
-                v = []                                                 # pour EF -> on a trois valeurs
+                v = []                                                 # pour EF -> we have three values
                 for i in range(1, 4):
-                    if data[i] == "None" or data[i] == "None\n":       # pour traîter les cas où on a None -> peut-être à modifier plus tard ??
+                    if data[i] == "None" or data[i] == "None\n":       # When we have None -> peut-être à modifier plus tard ??
                         data[i] = 0.0
                     v.append(float(data[i]))
                 names_values_dic[first_name].append(v)
@@ -45,10 +53,14 @@ def readfile(file_name):
 
                     mean_values[i] = v / nbr_values
                 
-                names_values_dic[key] = mean_values # normalement on devrait maintenant avoir une seule liste avec 3 valeurs
+                names_values_dic[key] = mean_values 
   
     return names_values_dic     
-#Can we work with multi threading?
+#----------------------------------------------------------------------------------------------------------------------
+
+
+#----------------------------------------------------------------------------------------------------------------------
+#This function takes an array and filters through it, using the created dictionaries
 def filter_trees(trees, filtered_trees, conversion_factor, EF, shading_coeff, MIR):
     dic_conversion_factor = readfile(conversion_factor)
     dic_EF = readfile(EF)
@@ -78,3 +90,18 @@ def filter_trees(trees, filtered_trees, conversion_factor, EF, shading_coeff, MI
             hits+=1
         
     return filtered_trees
+
+#----------------------------------------------------------------------------------------------------------------------
+
+
+#----------------------------------------------------------------------------------------------------------------------
+#Function to turn pointer pointer into a 2D numpy array
+
+
+def c_pp_to_np( y,  x, grid):
+    grid_np = np.zeros((y, x))  # Initialize a NumPy array
+    for i in range(y):
+        row_ptr = grid[i]  # Dereference the row pointer
+        grid_np[i, :] = np.ctypeslib.as_array(row_ptr, shape=(x,))
+    return grid_np
+#----------------------------------------------------------------------------------------------------------------------

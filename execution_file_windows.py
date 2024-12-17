@@ -9,7 +9,6 @@ import time
 
 from Functions.h_structures import *
 from Functions.e_filter_trees import *
-from Functions.g_pyfunctions import *
 #----------------------------------------------------------------------------------------
 #This is our main python file, which calls functions in C and needs to be run in then end                   
 #The first part of this file contains the functions that we call from C
@@ -42,6 +41,7 @@ start = time.time()
 
 #-----------------------------------------Defining the functions in C in python--------------------------------
 #This function will read the csv document and write its contents to a csv and an array containing the tree structures
+#Main_func2 will be defined later, because the length of the array containing the filtered trees is necessary
 main_func1 = clibrary.main_function1
 main_func1.argtypes = [ctypes.c_char_p, ctypes.POINTER(NR_LINES_GE*Tree), ctypes.c_int]
 main_func1.restype = None
@@ -99,8 +99,6 @@ length_x = ctypes.c_int(0)
 
 #------------------------------------------------------main 1----------------------------------------------------------
 #Running main1:
-#Inputs are predefined in file cfunctions.py
-#NR_LINES_GE is defined in c_c_to_py --> Amount of values, that we read into our file can be changed in that --> How can we define that in this file??
 
 main_func1(filepath, trees, NR_LINES_GE)
 
@@ -142,7 +140,7 @@ for i in range(NR_LINES_GE):
 
 
 #--------------------------------------------filter trees---------------------------------------------
-#getting paths of csv document
+#getting paths of csv documents
 Shading = os.path.join(path,'Data/shading_coeff.csv' )
 EF = os.path.join(path,'Data/EF.csv' )
 conversion_factor = os.path.join(path,'Data/conversion_factor.csv' )
@@ -150,7 +148,6 @@ MIR = os.path.join(path,'Data/MIR.csv' )
 #launch filteration
 np_filtered_trees = np.empty(0, dtype=tree_dtype)
 np_filtered_trees = filter_trees(np_trees, np_filtered_trees, conversion_factor, EF, Shading, MIR)
-#test time passed
 #------------------------------------------------------------------------------------------------------
 
 
@@ -158,7 +155,7 @@ np_filtered_trees = filter_trees(np_trees, np_filtered_trees, conversion_factor,
 #--------------------------------------grid calculations/ main function2----------------------------------------------
 size_filtered_trees = len(np_filtered_trees)
 summary.write(f"Amount of trees used for calculations: {size_filtered_trees}\n")
-#c_filtered_trees = get_array(size_filtered_trees)
+
 #convert np.array to pointer in c
 c_filtered_trees = np_filtered_trees.ctypes.data_as(ctypes.POINTER(size_filtered_trees*Tree))
 free_tree_array1(trees)
@@ -211,7 +208,7 @@ grid_OFP_np = c_pp_to_np(rows, cols, grid_OFP)
 grid_PM10_np = c_pp_to_np(rows, cols, grid_PM10)
 grid_O3_np=c_pp_to_np(rows, cols, grid_O3)
 grid_O3_net_uptake_np = c_pp_to_np(rows, cols, grid_O3_net_uptake)
-#-----Calculate total amounts------------------------
+#-----Calculate total amounts--------------------------------------------------------
 OFP_tot = np.sum(grid_OFP_np)
 PM10_tot = np.sum(grid_PM10_np)
 O3_tot = np.sum(grid_O3_np)
@@ -222,7 +219,6 @@ summary.write(f"Total amount of ozone absorbed: {O3_tot} kg/y \n")
 summary.write(f"Total net ozone absorbed(+)/emitted(-): {O3_net_uptake_tot} kg/y\n")
 
 # OFP #
-plt.figure(1)
 plt.imshow(grid_OFP_np, origin='lower', cmap="YlGnBu", interpolation='nearest', norm = SymLogNorm(linthresh=10, vmin=0, vmax=900))
 plt.title("Yearly Ozone Forming Potential (OFP) (kg/y)\n - grid based on indices")
 plt.xlabel("x-index")
@@ -235,7 +231,6 @@ plt.savefig(f'Results/OFP_map_{NR_LINES_GE}_indices.png')
 
 # PM10 # 
 plt.clf()
-plt.figure(1)
 plt.imshow(grid_PM10_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=1, vmin=0, vmax=5))
 plt.title("Yearly PM10 Deposition (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
@@ -247,7 +242,6 @@ plt.savefig(f'Results/PM10_map_{NR_LINES_GE}_indices.png')
 
 #O3_uptake
 plt.clf()
-plt.figure(1)
 plt.imshow(grid_O3_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=2, vmin=0, vmax=10))
 plt.title("Yearly amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
@@ -259,7 +253,6 @@ plt.savefig(f'Results/O3_map_{NR_LINES_GE}_indices.png')
 # O3__net_uptake #
 
 plt.clf()
-plt.figure(1)
 plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='afmhot', interpolation= 'nearest',  norm = SymLogNorm(linthresh=10, vmin=-500, vmax=0))
 plt.title("Yearly net amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")

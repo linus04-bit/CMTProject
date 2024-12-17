@@ -1,7 +1,7 @@
 import ctypes
 import numpy as np
 #---------------------------------------------------------------------
-#This file contains the class and ndtype used in python
+#This file contains the class Tree and ndtype Tree used in python
 #---------------------------------------------------------------------
 
 class Tree(ctypes.Structure):

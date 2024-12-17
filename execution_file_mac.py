@@ -9,7 +9,6 @@ import time
 
 from Functions.h_structures import *
 from Functions.e_filter_trees import *
-from Functions.g_pyfunctions import *
 #----------------------------------------------------------------------------------------
 #This is our main python file, which calls functions in C and needs to be run in then end                   
 #The first part of this file contains the functions that we call from C
