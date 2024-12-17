@@ -47,7 +47,7 @@ void extract_coordinates(struct Tree * trees, double * x, double * y, int size_t
 // We shift the trees such that the origin of our coordinate system is at
 // the tree at the most west and south position.
 
-void coordinates_adaption(struct Tree *trees, double * x, double* y, int size_trees_array){//distance = gridsize
+void coordinates_adaption(struct Tree *trees, double * x, double* y, int size_trees_array){
     double min_x = min(x, size_trees_array);
     double min_y = min(y, size_trees_array);
     //allocate memory
@@ -81,8 +81,6 @@ int distance(double* points, int size_trees_array, int gridsize){
 // element of our grid
 
 
-// we need to do a predefine 2D-array of 
-//size_trees_array [distance in y/gridsize][distance in x/gridsize]
 
 void calculations(int size_trees_array_filtered_trees, int length_y,int length_x, double** grid_OFP, double** grid_PM10, double** grid_O3, double** grid_O3_net_uptake, struct Tree *trees, double Ci_City, double conc_O3_city, int gridsize){
     for(int i = 0; i < length_y; i++){
@@ -110,12 +108,11 @@ void calculations(int size_trees_array_filtered_trees, int length_y,int length_x
                     O3_net_uptake_tot += trees[k].O3_net_uptake_yearly;
                 }
             }
-            // add values to field in grid
+            // add values to field in grid and conversion to kg/y
             grid_OFP[i][j] = OFP_tot*pow(10, -9);
             grid_PM10[i][j] = PM_tot;
             grid_O3[i][j] = O3_uptake_tot *pow(10,-3);
             grid_O3_net_uptake[i][j] = O3_net_uptake_tot*pow(10,-3);
-        //printf("%f\n", grid_O3_net_uptake[i][j]);
     }
     }
 }
