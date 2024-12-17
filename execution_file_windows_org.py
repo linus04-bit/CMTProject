@@ -21,7 +21,7 @@ path = os.getcwd()
 str_to_filepath = os.path.join(path, 'Data/SIPV_ICA_ARBRE_ISOLE.csv')
 
 #--------------------------------------------import c library---------------------------------------
-clibrary = ctypes.CDLL(os.path.join(path, 'Functions/main.so'))
+clibrary = ctypes.CDLL(os.path.join(path, 'Functions/main.dll'))
 
 
 #----------------------------------Fix constant values, can be changed by user-----------------------
