@@ -53,32 +53,22 @@ int readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // 
     while(index <= size_org) {
         fgets(line, sizeof(line), file);
         line[strcspn(line, "\n")] = '\0';
-        char * substring = strstr(line, ";");// will send a substringe to the first ;
-        int position =0;
-        char *substring = strstr(line, ";");    // will send me a last_substringer to the first 
+        char * substring = strstr(line, ";");// will send a substring to the first ;
         int position = 0;
         int last_position = 0;
         int matches = 1;
+
         // This loop turns, as long as a substring is found
         while(substring){
-        
-        // This will turn as long as a substring is found
-        while(substring) {
             last_position = position;
             position = substring - line;
             char* substring_saved = substring;
             substring = strstr(substring+1, ";");
+
             //species name -> amount of matches needs to be counted in the actual csv document
             if(matches == 2){
                 trees[index].species_name = my_strndup(line+last_position + 1, position - last_position-1);
-            char *substring_saved = substring;
-            substring = strstr(substring + 1, ";");
-            
-            // Species name
-            if(matches == 2) {
-                trees[index].species_name = my_strndup(line + last_position + 1, position - last_position - 1);
             }
-            
             // Crown height
             double trunk_height = 0.0;
             if(matches == 9) {
@@ -92,13 +82,9 @@ int readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // 
             // Crown diameter
             if(matches == 11) {
                 double value = atof(my_strndup(line + last_position + 1, position - last_position - 1));
+                trees[index].crown_diameter = value;
             }
-            //Adding attributes depending on if its a evergreen or broadleaf.
-            if(matches == 23){
-                char* type = my_strndup(line+last_position + 1, position - last_position-1);
 
-                if(strcmp(type,"Feuillus") == 0){
-            
             // Adding attributes based on whether the tree is evergreen or deciduous.
             // Values found in tables and in Kofel, Donato, et al.
             if(matches == 23) {
@@ -167,7 +153,7 @@ int readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // 
     // Write the header row
     fprintf(file_out, "Tree name; Crown Height; Crown Diameter, Position X, Position Y, Leaves Days\n");
 
-     for(int i = 0; i < size_org; i++) {
+    for(int i = 0; i < size_org; i++) {
         fprintf(file_out, "%s ; %f ; %f ; %f ; %f ; %d \n ", trees[i].species_name, trees[i].crown_height, trees[i].crown_diameter, trees[i].position_x, trees[i].position_y, trees[i].leaves_days);
     }
     

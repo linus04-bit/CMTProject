@@ -57,12 +57,6 @@ get_gridarray.argtypes = [ctypes.c_int, ctypes.c_int]
 get_gridarray.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))
 
 
-#This function will print one tree, for control
-printtree = clibrary.printTree
-printtree.argtypes = [ctypes.POINTER(Tree)]
-printtree.restype = None
-
-
 #This function frees an array of tree structures
 free_tree_array1 = clibrary.free_tree_array
 free_tree_array1.argtypes = [ctypes.POINTER(NR_LINES_GE*Tree)]
