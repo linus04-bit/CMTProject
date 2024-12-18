@@ -255,8 +255,8 @@ plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='afmhot', interpolation= 
 plt.title("Yearly net amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
-cbar = plt.colorbar(label = "O3_net_removed_mass values", ticks = [-100, -200, -300, -400, -500, -600, -700, -800])
-cbar.ax.set_yticklabels(['-100', '-200', '-300', '-400', '-500', '-600', '-700', '-800'])
+cbar = plt.colorbar(label = "O3_net_removed_mass values", ticks = [-100, -200, -300, -400, -600, -800])
+cbar.ax.set_yticklabels(['-100', '-200', '-300', '-400', '-600', '-800'])
 plt.savefig(f'Results/O3_net_uptake_map_{NR_LINES_GE}_indices.png')
 
 print("This was the last grid.")
