@@ -6,26 +6,26 @@
 #include "d_grid_functions.c"
 
 
-//-------------------------------------------------------------------------
+//------------------------------------------------------------------------------------
 //This is our main file, containing the two main functions that are called in Python
 // This is the file, that constructs our shared library
-//----------------------------------------------------------------------------
+//------------------------------------------------------------------------------------
 
 
-//----------------Main function 1 reads file and creates array of structures---------
+//----------------Main function 1 reads file and creates array of structures----------
 //Inputs
 // - binary string for the filename
 // - preallocated list of structures
-// - length of csv document
+// - length of CSV document
 void main_function1(char* filename, struct Tree *trees, int size_org){
     //-------------memory allocations-------------------------
     for (int i = 0; i < size_org; i++) {
         memory_allocation((trees+i));
     }
-    //---------creating list of structures---------------------
+    //---------creating list of structures--------------------
     readwriteDocument(filename, trees, size_org);
 }
-//----------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
 
 
 //----------------------------main function2 calculates the values on the grid-----------
@@ -43,19 +43,16 @@ void main_function2(struct Tree * filtered_trees, int size_filtered_trees, doubl
     double * x = calloc(size_filtered_trees, sizeof(double));
     double * y = calloc(size_filtered_trees, sizeof(double)); 
     if(x == NULL | y == NULL)printf("Memory allocation for x and y failed");
-    //------------------------calculations-------------------------
+    //------------------------calculations--------------------
 
-    //adjust and add coordinates
+    //Adjust and add coordinates
     extract_coordinates(filtered_trees,x, y, size_filtered_trees);
     coordinates_adaption(filtered_trees, x, y, size_filtered_trees);
-    //for(int i = 0; i<size_filtered_trees; i++){
-        //printf("%f, %f\n", filtered_trees[i].position_x_grid, filtered_trees[i].position_y_grid);
-    //}
-    // calculate lengths
+    //Calculate lengths
     *length_y = distance(y, size_filtered_trees, gridsize);
     *length_x = distance (x, size_filtered_trees, gridsize);
     printf("These are the lengths of our grid: %d, %d\n", *length_y, *length_x);
-    //adjust grid memory to the length we actually need
+    //Adjust grid memory to the length we actually need
     *grid_OFP = get_gridarray(*length_y, *length_x);
     *grid_PM10 = get_gridarray(*length_y, *length_x);
     *grid_O3 = get_gridarray(*length_y, *length_x);
@@ -64,11 +61,11 @@ void main_function2(struct Tree * filtered_trees, int size_filtered_trees, doubl
     //Do calculations within the grid
     calculations(size_filtered_trees, *length_y, *length_x, *grid_OFP, *grid_PM10,*grid_O3, *grid_O3_net_uptake, filtered_trees, C_PM10, C_O3, gridsize);
     printf("Calculations are done\n");
-    //----------------------------------------------------------------------------------------
+    //----------------------------------------------------------
 
-    //------------------free memory-------------------------------- 
+    //------------------free memory-----------------------------
     //memory of trees and grid will be freed separately 
     free(x);
     free(y);
 }
-//---------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------

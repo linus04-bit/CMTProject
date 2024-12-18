@@ -11,6 +11,8 @@
 
 // -----------------------------------------------------------------
 // max: This function finds the maximum within an array of doubles.
+// Input: Array, size of array
+// Output: Max value
 // -----------------------------------------------------------------
 
 double max(double *list, int size_trees_array) {
@@ -23,6 +25,8 @@ double max(double *list, int size_trees_array) {
 
 // -----------------------------------------------------------------
 // min: This function finds the minimum within an array of doubles.
+// Input: Array, size of array
+// Output: Min value
 // -----------------------------------------------------------------
 
 double min(double *list, int size_trees_array) {
@@ -35,6 +39,8 @@ double min(double *list, int size_trees_array) {
 
 // ------------------------------------------------------------------------------------------------------
 // extract_coordinates: This function writes the coordinates into the structure as an array of doubles.
+// Input: Tree array, array of coordinates in x and y and size of the tree array
+// Output: None
 // ------------------------------------------------------------------------------------------------------
 
 void extract_coordinates(struct Tree *trees, double *x, double *y, int size_trees_array){
@@ -47,6 +53,8 @@ void extract_coordinates(struct Tree *trees, double *x, double *y, int size_tree
 // --------------------------------------------------------------------------------------------------------------------------
 // coordinates_adaption: This function adds an additional field to the Tree structure and adjusts the tree positions so that 
 //                       the origin of the coordinate system is set at the tree located at the most southwestern point.
+// Input: Tree array, array of coordinates in x and y and size of the tree array
+// Output: None
 // -------------------------------------------------------------------------------------------------------------------------- 
 
 void coordinates_adaption(struct Tree *trees, double *x, double *y, int size_trees_array) {
@@ -85,7 +93,8 @@ int distance(double* points, int size_trees_array, int gridsize){
 // This function calculates the necessary properties within 
 // a 100x100 square and writes that value to the corresponding 
 // element of our grid
-
+// Inputs: Size of tree array, distances of grid in x and y direction, previously allocated grids, tree array, pollutant concentrations, size of gridcells
+// Ouputs: None
 
 
 void calculations(int size_trees_array_filtered_trees, int length_y,int length_x, double** grid_OFP, double** grid_PM10, double** grid_O3, double** grid_O3_net_uptake, struct Tree *trees, double Ci_City, double conc_O3_city, int gridsize){

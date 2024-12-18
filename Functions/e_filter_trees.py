@@ -102,7 +102,7 @@ def filter_trees(trees, filtered_trees, conversion_factor, EF, shading_coeff, MI
 #----------------------------------------------------------------------------------------------------------------------
 #Function to turn pointer pointer into a 2D numpy array
 #Input: Length in y and x, POINTER(POINTER(ctypes.c_double))
-#Output: 2D Numpy array
+#Output: 2D Numpy Array
 def c_pp_to_np( y,  x, grid):
     grid_np = np.zeros((y, x))  # Initialize a NumPy array
     for i in range(y):
