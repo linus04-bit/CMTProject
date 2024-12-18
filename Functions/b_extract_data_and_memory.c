@@ -167,7 +167,7 @@ int readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // 
 // -----------------------------------------------------------------------
 
 double *getarray(int size) {
-    double *arr = malloc(size *sizeof(double));
+    double *arr = malloc(size * sizeof(double));
     return arr;
 }
 
@@ -178,7 +178,7 @@ double *getarray(int size) {
 double **get_gridarray(int rows, int columns) {
     
     // Memory allocation for rows
-    double **grid = malloc(rows *sizeof(double *));
+    double **grid = malloc(rows * sizeof(double *));
     if (grid == NULL) {
         printf("Memory allocation failed for grid rows.\n");
         return NULL;
@@ -186,7 +186,7 @@ double **get_gridarray(int rows, int columns) {
     
     // Memory allocation for columns
     for (int i = 0; i < rows; i++) {
-        grid[i] = (double *)malloc(columns *sizeof(double));
+        grid[i] = (double *)malloc(columns * sizeof(double));
         if (grid[i] == NULL) {
             printf("Memory allocation failed for grid columns.\n");
             return NULL;
@@ -207,7 +207,7 @@ double **get_gridarray(int rows, int columns) {
 // ---------------------------------------------------------------------------------------------------------
 
 struct Tree *gettreearray(int size) {
-    struct Tree *trees = malloc(size *sizeof(struct Tree));
+    struct Tree *trees = malloc(size * sizeof(struct Tree));
     for(int i = 0; i < size; i++){
         struct Tree *tree = &trees[i];
         tree->crown_height = 0.0;
