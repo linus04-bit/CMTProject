@@ -4,14 +4,12 @@
 #include <string.h>
 #include "a_model_functions.c" 
 
-
 #define PI 3.14159265358979323846 
 #define MAX_Line_Length 1024
 #define LEAVE_DAYS_EVERGREENS 365                // value taken from Kofel, Donato, et al.
 #define LEAVE_DAYS_BROADLEAVES 183               // value taken from Kofel, Donato, et al.
 #define STOMATAL_COND_EVERGREENS 16.896          // value taken from Zeppel et al.
 #define STOMATAL_COND_BROADLEAVES 72.637         // value taken from Zeppel et al.
-
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
 // This file contains the functions to read the CSV document with the trees in Geneva, as well as the functions to allocate and free memory.
@@ -135,7 +133,7 @@ int readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // 
     double average_height = sum_h/count_h;           
     double average_crown_diameter = sum_d/count_d; 
 
-    // Adding the average values to the tree structures of the trees missing these measured values in the CSV file
+    // Adding the average values to the Tree structures of the trees missing these measured values in the CSV file
     for(int i = 0; i < size_org; i++){
         if(trees[i].crown_height == 0.0) {
             trees[i].crown_height = average_height;
@@ -145,62 +143,74 @@ int readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // 
         }
     }
     
-    //writes content to csv file --> not necessary but helps to check for errors
-    FILE *file_out = fopen("Results/trees_GE.csv", "w"); // Open the file in write mode
+    // Write content to a control CSV file --> not necessary but helps to check for errors
+    FILE *file_out = fopen("Results/trees_GE.csv", "w");    // Open the file in write mode
 
-    // Check if the file was opened successfully
+    // Check if the control file was opened successfully
     if (file_out == NULL) {
         printf("Error opening file!\n");
-        return 1; // Return error code
+        return 1;   // Return error code
     }
 
     // Write the header row
-    fprintf(file_out, "Tree name; Crown Height; Crown Diameter, Position X, Position Y, Leave Days\n");
+    fprintf(file_out, "Tree name; Crown Height; Crown Diameter, Position X, Position Y, Leaves Days\n");
 
-     for(int i = 0; i < size_org; i++){
+     for(int i = 0; i < size_org; i++) {
         fprintf(file_out, "%s ; %f ; %f ; %f ; %f ; %d \n ", trees[i].species_name, trees[i].crown_height, trees[i].crown_diameter, trees[i].position_x, trees[i].position_y, trees[i].leaves_days);
     }
+    
     // Close the file
     fclose(file_out);
     printf("Data written to 'trees_GE.txt' successfully!\n");
 }
-//------------------------------------------------------
 
+// -----------------------------------------------------------------------
+// getarray: This function is used to allocate memory for a simple array.
+// -----------------------------------------------------------------------
 
-//------memory allocation-------------------------------
-//for simple array
-double* getarray(int size){
-    double* arr = malloc(size * sizeof(double));
+double *getarray(int size) {
+    double *arr = malloc(size *sizeof(double));
     return arr;
 }
-// 2D array used for grid
-double ** get_gridarray(int rows, int columns){
-    //memory allocation for rows
-    double **grid = malloc(rows * sizeof(double *));
+
+// ------------------------------------------------------------------------------------------
+// get_gridarray: This function is used to allocate memory for a 2D array used for the grid.
+// ------------------------------------------------------------------------------------------
+
+double **get_gridarray(int rows, int columns) {
+    
+    // Memory allocation for rows
+    double **grid = malloc(rows *sizeof(double *));
     if (grid == NULL) {
-        printf("Memory allocation failed for grid rows\n");
+        printf("Memory allocation failed for grid rows.\n");
         return NULL;
     }
-    //memory allocation for columns
+    
+    // Memory allocation for columns
     for (int i = 0; i < rows; i++) {
-        grid[i] = (double *)malloc(columns * sizeof(double));
+        grid[i] = (double *)malloc(columns *sizeof(double));
         if (grid[i] == NULL) {
-            printf("Memory allocation failed for grid columns\n");
+            printf("Memory allocation failed for grid columns.\n");
             return NULL;
         }
     }
-    // initialize the grid to zero
-    for(int i = 0; i<rows; i++){
-        for(int j = 0; j<columns; j++){
+    
+    // Initialize the grid cells to zero
+    for(int i = 0; i < rows; i++) {
+        for(int j = 0; j < columns; j++) {
             grid[i][j] = 0.0;
         }
     }
     return grid;
 }
-//for an array containing tree structures, initializing the value to zero
-struct Tree* gettreearray(int size){
-    struct Tree * trees = malloc(size *sizeof(struct Tree));
-    for(int i = 0; i<size; i++){
+
+// ---------------------------------------------------------------------------------------------------------
+// gettreearray: For an array containing Tree structures, this function initializes all the values to zero.
+// ---------------------------------------------------------------------------------------------------------
+
+struct Tree *gettreearray(int size) {
+    struct Tree *trees = malloc(size *sizeof(struct Tree));
+    for(int i = 0; i < size; i++){
         struct Tree *tree = &trees[i];
         tree->crown_height = 0.0;
         tree->crown_diameter = 0.0;
@@ -219,7 +229,7 @@ struct Tree* gettreearray(int size){
         tree->leaf_area = 0.0;
         tree->leaf_dry_weight = 0.0;
         tree->OFP_hourly = 0.0;
-        tree -> OFP_yearly = 0.0;
+        tree->OFP_yearly = 0.0;
         tree->PM10_yearly = 0.0;
         tree->O3_instantaneous = 0.0;
         tree->O3_yearly = 0.0;
@@ -229,28 +239,40 @@ struct Tree* gettreearray(int size){
     }
     return trees;
 }
-//for a the name of the species
-void memory_allocation(struct Tree *tree){
+
+// Initialize the name of the species to NULL
+void memory_allocation(struct Tree *tree) {
     tree->species_name = NULL;
 }
-//-------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// freearray: This function is used to free the memory allocated for an array.
+// ----------------------------------------------------------------------------
 
-//-------------free memory-------------------------------
-// free an array
-void freearray(double* arr){
+void freearray(double *arr) {
     free(arr);
 }
-//free memory of the name of the species
-void free_memory(struct Tree *tree){
+
+// ---------------------------------------------------------------------------------------------
+// free_memory: This function is used to free the memory allocated for the name of the species.
+// ---------------------------------------------------------------------------------------------
+
+void free_memory(struct Tree *tree) {
     free(tree->species_name);
 }
-// free the grid
-void free_grid(double** grid){
+
+// ---------------------------------------------------------------------------------------
+// free_grid: This function is used to free the memory allocated for the grid (2D array).
+// ---------------------------------------------------------------------------------------
+
+void free_grid(double **grid) {
     free(grid);
 }
-//free an array of tree structures
-void free_tree_array(struct Tree *tree){
+
+// ----------------------------------------------------------------------------------
+// free_tree_array: This function is used to free an array from the Tree structures.
+// ----------------------------------------------------------------------------------
+
+void free_tree_array(struct Tree *tree) {
     free(tree);
 }
-//-------------------------------------------------------
