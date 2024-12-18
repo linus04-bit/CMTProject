@@ -5,59 +5,65 @@
 
 #include "b_extract_data_and_memory.c"
 
-
-//--------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------
 // This file includes the functions related to the creation of the grid.
-//--------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------
 
-//-----------------find max----------------------------
-// This function finds the max within a list of doubles
-double max(double * list, int size_trees_array){
+// -----------------------------------------------------------------
+// max: This function finds the maximum within an array of doubles.
+// -----------------------------------------------------------------
+
+double max(double *list, int size_trees_array) {
     double max = 0.0;
-    for(int i =0; i<size_trees_array; i++){
-        if(list[i]>max) max = list[i];
+    for(int i = 0; i < size_trees_array; i++) {
+        if(list[i] > max) max = list[i];
     }
     return max;
 }
 
+// -----------------------------------------------------------------
+// min: This function finds the minimum within an array of doubles.
+// -----------------------------------------------------------------
 
-//-------------------find min---------------------------
-// This function finds the min within a list of doubles
-double min(double * list, int size_trees_array){
+double min(double *list, int size_trees_array) {
     double min = *list;
-    for(int i =0; i<size_trees_array; i++){
-        if (list[i]<min) min = list[i];
+    for(int i = 0; i < size_trees_array; i++) {
+        if (list[i] < min) min = list[i];
     }
     return min;
 }
 
+// ------------------------------------------------------------------------------------------------------
+// extract_coordinates: This function writes the coordinates into the structure as an array of doubles.
+// ------------------------------------------------------------------------------------------------------
 
-//------------extract coordinates---------------------
-// This function writes the coordinates within the structures to a list of doubles
-void extract_coordinates(struct Tree * trees, double * x, double * y, int size_trees_array){
-    for(int i = 0; i<size_trees_array; i ++){
+void extract_coordinates(struct Tree *trees, double *x, double *y, int size_trees_array){
+    for(int i = 0; i < size_trees_array; i++) {
         x[i] = trees[i].position_x;
         y[i] = trees[i].position_y;
     }
 }
 
+// --------------------------------------------------------------------------------------------------------------------------
+// coordinates_adaption: This function adds an additional field to the Tree structure and adjusts the tree positions so that 
+//                       the origin of the coordinate system is set at the tree located at the most southwestern point.
+// -------------------------------------------------------------------------------------------------------------------------- 
 
-//------------adjusted coordinates to structures---------
-// In this function we add an additional field to the structures
-// We shift the trees such that the origin of our coordinate system is at
-// the tree at the most west and south position.
-
-void coordinates_adaption(struct Tree *trees, double * x, double* y, int size_trees_array){
+void coordinates_adaption(struct Tree *trees, double *x, double *y, int size_trees_array) {
+    // Find the minimum x coordinate and the minimum y coordinate -> coordinates of the tree at the most southwestern point  
     double min_x = min(x, size_trees_array);
     double min_y = min(y, size_trees_array);
-    //allocate memory
-    double* trees_x_converted = malloc(size_trees_array*sizeof(double));
-    double* trees_y_converted = malloc(size_trees_array*sizeof(double));
-    for (int i =0; i<size_trees_array; i++){
-        //shift coordinates
-        trees_x_converted[i] = (x[i]-min_x); 
+    
+    // Allocate memory for the converted x and y coordinates
+    double *trees_x_converted = malloc(size_trees_array * sizeof(double));
+    double *trees_y_converted = malloc(size_trees_array * sizeof(double));
+    
+    for (int i = 0; i < size_trees_array; i++) {
+        // Shift the coordinates
+        trees_x_converted[i] = (x[i] - min_x); 
         trees_y_converted[i] = (y[i] - min_y);
-        //add adjusted coordinates to tree structure
+        
+        // Add the adjusted coordinates to the Tree structure
         trees[i].position_x_grid = trees_x_converted[i];
         trees[i].position_y_grid = trees_y_converted[i];
     }
