@@ -7,24 +7,20 @@
 
 #define PI 3.14159265358979323846 
 #define MAX_Line_Length 1024
-#define LEAVE_DAYS_EVERGREENS 365 // Value taken from Kofel, Donato, et al.
-#define LEAVE_DAYS_BROADLEAVES 183 // Value taken from Kofel, Donato, et al.
-#define STOMATAL_COND_EVERGREENS 16.896 //Value taken from Zeppel et al.
-#define STOMATAL_COND_BROADLEAVES 72.637 // Value taken from Zeppel et al.
+#define LEAVE_DAYS_EVERGREENS 365                // value taken from Kofel, Donato, et al.
+#define LEAVE_DAYS_BROADLEAVES 183               // value taken from Kofel, Donato, et al.
+#define STOMATAL_COND_EVERGREENS 16.896          // value taken from Zeppel et al.
+#define STOMATAL_COND_BROADLEAVES 72.637         // value taken from Zeppel et al.
 
 
-//-----------------------------------------------------------------------------------------------------------------------------
-// This file contains the functions to read the csv document with the trees in Geneva, as well as the functions to allocate and free memory.
-//--------------------------------------------------------------------------------------------------------------------------------
-
-
-
+//-------------------------------------------------------------------------------------------------------------------------------------------
+// This file contains the functions to read the CSV document with the trees in Geneva, as well as the functions to allocate and free memory.
+//-------------------------------------------------------------------------------------------------------------------------------------------
 
 //------------for memory allocation of str into structure------------------------
-// This functions is used within the readandwrite Document function to allocate memory
-// for strings
+// This function is used within the readwriteDocument function to allocate memory for strings.
 
-char* my_strndup(const char* str, size_t n) {
+char *my_strndup(const char *str, size_t n) {
     // Allocate memory for the substring + 1 for null terminator
     char *dup = malloc(n + 1);
     if (dup == NULL) {
