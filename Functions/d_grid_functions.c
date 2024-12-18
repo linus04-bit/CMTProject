@@ -96,7 +96,7 @@ void calculations(int size_trees_array_filtered_trees, int length_y,int length_x
             double O3_uptake_tot = 0.0;
             double O3_net_uptake_tot = 0.0;
             for(int k = 0; k<size_trees_array_filtered_trees; k++){
-                if((trees[k].position_x_grid <=j*gridsize+gridsize && trees[k].position_x_grid >=j*gridsize) &&(trees[k].position_y_grid >=i*gridsize && trees[k].position_y_grid <= i*gridsize+ gridsize)){
+                if((trees[k].position_x_grid <=j*gridsize+gridsize && trees[k].position_x_grid >=j*gridsize) &&(trees[k].position_y_grid >=i*gridsize && trees[k].position_y_grid <= i*gridsize+ gridsize)){ //tree needs to be within the grid cell that we are currently analyzing
                     // functions are defined in a_model_functions.c
                     leaf_area_func(&trees[k]);
                     leaf_dry_weight_func(&trees[k]);

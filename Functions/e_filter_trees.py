@@ -12,7 +12,9 @@ import ctypes
 
 
 #----------------------------------------------------------------------------------------------------------------------
-#This function reads in csv files and calculates average values for each genus present
+#This function reads in CSV files and calculates average values for each genus present
+#Input: Filepath of CSV file
+#Output:dictionary
 def readfile(file_name):
     names_values_dic = {}
 
@@ -60,7 +62,10 @@ def readfile(file_name):
 
 
 #----------------------------------------------------------------------------------------------------------------------
+#Inputs: filled tree array, empty tree array, three file paths
+#outputs: filtered tree array (fills the empty tree array)
 #This function takes an array and filters through it, using the created dictionaries
+#It adds the necessary scientific data to the trees
 def filter_trees(trees, filtered_trees, conversion_factor, EF, shading_coeff, MIR):
     dic_conversion_factor = readfile(conversion_factor)
     dic_EF = readfile(EF)
@@ -96,8 +101,8 @@ def filter_trees(trees, filtered_trees, conversion_factor, EF, shading_coeff, MI
 
 #----------------------------------------------------------------------------------------------------------------------
 #Function to turn pointer pointer into a 2D numpy array
-
-
+#Input: Length in y and x, POINTER(POINTER(ctypes.c_double))
+#Output: 2D Numpy array
 def c_pp_to_np( y,  x, grid):
     grid_np = np.zeros((y, x))  # Initialize a NumPy array
     for i in range(y):
