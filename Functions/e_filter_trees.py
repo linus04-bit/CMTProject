@@ -31,7 +31,7 @@ def readfile(file_name):
             elif n == 3:  
                 v = []                                                 # pour EF -> we have three values
                 for i in range(1, 4):
-                    if data[i] == "None" or data[i] == "None\n":       # When we have None -> peut-être à modifier plus tard ??
+                    if data[i] == "None" or data[i] == "None\n":       # When we have None --> setting to 0.0
                         data[i] = 0.0
                     v.append(float(data[i]))
                 names_values_dic[first_name].append(v)

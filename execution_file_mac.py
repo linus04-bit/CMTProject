@@ -2,8 +2,6 @@ import numpy as np
 import ctypes
 import os
 import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
-from matplotlib.colors import Normalize
 from matplotlib.colors import SymLogNorm
 import time
 
@@ -219,7 +217,7 @@ summary.write(f"Total amount of ozone absorbed: {O3_tot} kg/y \n")
 summary.write(f"Total net ozone absorbed(+)/emitted(-): {O3_net_uptake_tot} kg/y\n")
 
 # OFP #
-plt.imshow(grid_OFP_np, origin='lower', cmap="YlGnBu", interpolation='nearest', norm = SymLogNorm(linthresh=10, vmin=0, vmax=900))
+plt.imshow(grid_OFP_np, origin='lower', cmap="YlGnBu", interpolation='nearest', norm = SymLogNorm(linthresh=10, vmin=0, vmax=grid_OFP_np.max()))
 plt.title("Yearly Ozone Forming Potential (OFP) (kg/y)\n - grid based on indices")
 plt.xlabel("x-index")
 plt.ylabel("y-index")
@@ -231,7 +229,7 @@ plt.savefig(f'Results/OFP_map_{NR_LINES_GE}_indices.png')
 
 # PM10 # 
 plt.clf()
-plt.imshow(grid_PM10_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=1, vmin=0, vmax=5))
+plt.imshow(grid_PM10_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=1, vmin=0, vmax=grid_PM10_np.max()))
 plt.title("Yearly PM10 Deposition (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
@@ -242,7 +240,7 @@ plt.savefig(f'Results/PM10_map_{NR_LINES_GE}_indices.png')
 
 #O3_uptake
 plt.clf()
-plt.imshow(grid_O3_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=2, vmin=0, vmax=10))
+plt.imshow(grid_O3_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=2, vmin=0, vmax=grid_O3_np.max()))
 plt.title("Yearly amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
@@ -253,7 +251,7 @@ plt.savefig(f'Results/O3_map_{NR_LINES_GE}_indices.png')
 # O3__net_uptake #
 
 plt.clf()
-plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='afmhot', interpolation= 'nearest',  norm = SymLogNorm(linthresh=10, vmin=-500, vmax=0))
+plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='afmhot', interpolation= 'nearest',  norm = SymLogNorm(linthresh=10, vmin=grid_O3_net_uptake_np.min(), vmax=0))
 plt.title("Yearly net amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
