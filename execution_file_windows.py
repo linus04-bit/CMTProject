@@ -7,26 +7,30 @@ import time
 
 from Functions.h_structures import *
 from Functions.e_filter_trees import *
-#----------------------------------------------------------------------------------------
-#This is our main python file, which calls functions in C and needs to be run in then end                   
+#---------------------------------------------------------------------------------------------------
+#This is our main python file, which calls functions in C and needs to be run                   
 #The first part of this file contains the functions that we call from C
 #The second part runs the defined functions
 #This file also predefines the input 
-#---------------------------------------------------------------------------------------
-path = os.getcwd()
-#The following value defines, how many values are read into our file  
+#----------------------------------------------------------------------------------------------------
+path = os.getcwd() 
 str_to_filepath = os.path.join(path, 'Data/SIPV_ICA_ARBRE_ISOLE.csv')
 
-#--------------------------------------------import c library---------------------------------------
+#--------------------------------------------import C library---------------------------------------
 clibrary = ctypes.CDLL(os.path.join(path, 'Functions/main.dll'))
 
 
+
+#----------------------------------------------Input-------------------------------------------------
 #----------------------------------Fix constant values, can be changed by user-----------------------
-C_PM10= 15.2 #Concentration of PM10 --> Kofel: 16.99 (2019)
-C_O3 = 48.09 #Concentration of Ozone --> Kofel: 44.786 (2019)
+C_PM10= 15.2 #Concentration of PM10 --> Kofel, Donato, et al.: 16.99 (2019)
+C_O3 = 48.09 #Concentration of Ozone --> Kofel, Donato, et al.: 44.786 (2019)
 gridsize = 100 #Size of the fields over which we calculate the output
-NR_LINES_GE =120000 #Amount of data taken into account from the csv file
+NR_LINES_GE =120000 #Amount of data taken into account from the CSV file
 #----------------------------------------------------------------------------------------------------
+
+
+
 summary = open("Results/summary.txt", "w")
 summary.write(f"Concentration of PM10 in microgrammes per m^3 : {C_PM10}\n") 
 summary.write(f"Concentration of Ozone in microgrammes per m^3: {C_O3}\n")
@@ -37,7 +41,7 @@ start = time.time()
 #------------------------------------------------------------------------------------------------------
 
 
-#-----------------------------------------Defining the functions in C in python--------------------------------
+#-----------------------------------------Defining the functions of C in python------------------------
 #This function will read the csv document and write its contents to a csv and an array containing the tree structures
 #Main_func2 will be defined later, because the length of the array containing the filtered trees is necessary
 main_func1 = clibrary.main_function1
@@ -62,6 +66,7 @@ free_tree_array1 = clibrary.free_tree_array
 free_tree_array1.argtypes = [ctypes.POINTER(NR_LINES_GE*Tree)]
 free_tree_array1.restype = None
 
+#This function frees a 2D array (=grid)
 free_grid = clibrary.free_grid
 free_grid.argtypes=[ctypes.POINTER(ctypes.POINTER(ctypes.c_double))]
 free_grid.restype = None
@@ -74,6 +79,8 @@ free_grid.restype = None
 trees = get_array(NR_LINES_GE)
 str_to_filepath.encode(encoding="utf-8")
 filepath = ctypes.c_char_p(str_to_filepath.encode(encoding="utf-8"))
+
+
 #Input main_func 2
 grid_OFP = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))()
 grid_PM10 = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))()
@@ -132,7 +139,7 @@ for i in range(NR_LINES_GE):
 
 
 #--------------------------------------------filter trees---------------------------------------------
-#getting paths of csv documents
+#getting paths of necessary CSV Data documents
 Shading = os.path.join(path,'Data/shading_coeff.csv' )
 EF = os.path.join(path,'Data/EF.csv' )
 conversion_factor = os.path.join(path,'Data/conversion_factor.csv' )
@@ -144,7 +151,7 @@ np_filtered_trees = filter_trees(np_trees, np_filtered_trees, conversion_factor,
 
 
 
-#--------------------------------------grid calculations/ main function2----------------------------------------------
+#--------------------------------------grid calculations/ main function2-------------------------------
 size_filtered_trees = len(np_filtered_trees)
 summary.write(f"Amount of trees used for calculations: {size_filtered_trees}\n")
 
@@ -183,7 +190,7 @@ main_func2(
     C_O3,
     gridsize
 )
-#----------------------------------------Free Filtered Tree-----------------------------------------------------
+#----------------------------------------Free Filtered Tree Array-----------------------------
 #Redefine free_tree_array function for different size of array
 free_tree_array2 = clibrary.free_tree_array
 free_tree_array2.argtypes = [ctypes.POINTER(size_filtered_trees*Tree)]
@@ -191,7 +198,7 @@ free_tree_array2.restype = None
 
 free_tree_array2(c_filtered_trees)
 
-#--------------------------------------affichage----------------------------------------------
+#--------------------------------------convertion for visualization---------------------------
 
 #convert Pointer(Pointer(double)) to a 2D array in python.
 rows = length_y.value
@@ -200,7 +207,7 @@ grid_OFP_np = c_pp_to_np(rows, cols, grid_OFP)
 grid_PM10_np = c_pp_to_np(rows, cols, grid_PM10)
 grid_O3_np=c_pp_to_np(rows, cols, grid_O3)
 grid_O3_net_uptake_np = c_pp_to_np(rows, cols, grid_O3_net_uptake)
-#-----Calculate total amounts--------------------------------------------------------
+#--------------------------Calculate total amounts--------------------------------------------
 OFP_tot = np.sum(grid_OFP_np)
 PM10_tot = np.sum(grid_PM10_np)
 O3_tot = np.sum(grid_O3_np)
@@ -209,9 +216,9 @@ summary.write(f"Total amount of ozone emitted: {OFP_tot} kg/y\n")
 summary.write(f"Total amount of PM10 absorbed: {PM10_tot} kg/y\n")
 summary.write(f"Total amount of ozone absorbed: {O3_tot} kg/y \n")
 summary.write(f"Total net ozone absorbed(+)/emitted(-): {O3_net_uptake_tot} kg/y\n")
-
+#--------------------------------------visualization-------------------------------------------
 # OFP #
-plt.imshow(grid_OFP_np, origin='lower', cmap="YlGnBu", interpolation='nearest', norm = SymLogNorm(linthresh=10, vmin=0, vmax=grid_OFP_np.max()))
+plt.imshow(grid_OFP_np, origin='lower', cmap="YlGnBu", interpolation='nearest', norm = SymLogNorm(linthresh=10, vmin=0, vmax=grid_OFP_np.max())) #Symlognorm allows to depict the colors on a log scale, but not the values
 plt.title("Yearly Ozone Forming Potential (OFP) (kg/y)\n - grid based on indices")
 plt.xlabel("x-index")
 plt.ylabel("y-index")
@@ -243,7 +250,6 @@ cbar.ax.set_yticklabels(['1', '2', '3', '4', '5', '6', '7', '8'])
 plt.savefig(f'Results/O3_map_{NR_LINES_GE}_indices.png')
 
 # O3__net_uptake #
-
 plt.clf()
 plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='afmhot', interpolation= 'nearest',  norm = SymLogNorm(linthresh=10, vmin=grid_O3_net_uptake_np.min(), vmax=0))
 plt.title("Yearly net amount of O3 absorbed (kg/y)\n - grid based on indices")
