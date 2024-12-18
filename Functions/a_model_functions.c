@@ -2,25 +2,23 @@
 #include <math.h>
 
 #define PI 3.14159265358979323846 
-#define MW_O3 47.997 // molar weight of O3 in g/mol
-#define MOLAR_VOlUME 0.02445 // molar volume of air at STP in m³/mol
-#define P 12 // photoperiod: approximation of 12 h/day
-#define Vd 0.0064   // m/s           dry deposition velocity of PM10
-#define DIFF_RATIO 0.613 //diffusibility ration between ozone and water vapor
-#define PART_SUSP_RATE 0.5 //particle resuspension rate back to the atmosphere 
-#define STOMATAL_O3_FLUX 0.3 //A stomatal flux of 30% of total potential O3 was considered 
+#define MW_O3 47.997                       // molar weight of O3 in g/mol
+#define MOLAR_VOlUME 0.02445               // molar volume of air at STP in m³/mol
+#define P 12                               // photoperiod: approximation of 12 h/day
+#define Vd 0.0064                          // dry deposition velocity of PM10 in m/s
+#define DIFF_RATIO 0.613                   // diffusibility ratio between ozone and water vapor
+#define PART_SUSP_RATE 0.5                 // particle resuspension rate back to the atmosphere 
+#define STOMATAL_O3_FLUX 0.3               // a stomatal flux of 30% of total potential O3 was considered 
 
 
-//------------------------------------------------------------------------------------------------------------------
-// This file contains the definition of the Tree structure, as well as all functions related to computing the fields
-//------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
+// This file contains the definition of the Tree structure, as well as all functions related to computing the fields.
+//-------------------------------------------------------------------------------------------------------------------
 
+// ------------------------------
+// Structure for a single tree : 
+// ------------------------------ 
 
-// -------------------------------- 
-// Structure for a single tree 
-// -------------------------------- 
-
-// We only want tree structure in this file
 struct Tree {
     char * species_name;
     double crown_height;          // m, total_height - trunc_height
@@ -30,33 +28,33 @@ struct Tree {
     double position_y_grid;
     double position_x_grid;
 
-// From literature review
-    double shading_factor;        // no units, %
-    double conversion_factor;     // g/m2
-    int leaves_days;              // days         // 365 if evergreen, 183 if deciduous
-    double stomatal_conductance;  // mmol(water vapor)/m2/s   // species-specific stomatal conductance to water vapor 
+    // From literature review :
+    double shading_factor;           // no units, %
+    double conversion_factor;        // g/m2
+    int leaves_days;                 // number of days -> 365 if evergreen, 183 if deciduous
+    double stomatal_conductance;     // mmol(water vapor)/m2/s ; species-specific stomatal conductance to water vapor 
 
-    double mass_emission_factor[3]; // ug(VOC)/gdw/h  // VOC = Volatile Organic Compound  // gdw: grams of leaf dry weight 
-                                    // mass_emission_factor[0] : isoprene
-                                    // mass_emission_factor[1] : monoterpenes
-                                    // mass_emission_factor[2] : sesquiterpenes
+    double mass_emission_factor[3];  // ug(VOC)/gdw/h ; VOC = Volatile Organic Compound ; gdw: grams of leaf dry weight 
+                                     // mass_emission_factor[0] : isoprene
+                                     // mass_emission_factor[1] : monoterpenes
+                                     // mass_emission_factor[2] : sesquiterpenes
     
-    double max_incremental_reactivity[3]; // g(O3)/g(VOC)     
-                                          // max_incremental_reactivity[0] : isoprene
-                                          // max_incremental_reactivity[2] : monoterpenes
-                                          // max_incremental_reactivity[3] : sesquiterpenes
+    double max_incremental_reactivity[3];  // g(O3)/g(VOC)     
+                                           // max_incremental_reactivity[0] : isoprene
+                                           // max_incremental_reactivity[1] : monoterpenes
+                                           // max_incremental_reactivity[2] : sesquiterpenes
     
     // Calculated during the execution in main() :
-    double leaf_area;               // m2
-    double leaf_dry_weight;         // g
-    double OFP_hourly;              // ug(O3)/h
-    double OFP_yearly;              // ug(O3)/y
-    double PM10_yearly;             // ug(PM10)/y
-    double O3_instantaneous;        // (nmol(O3)/m2/s) 
-    double O3_yearly;               // mol(O3)/m2/y
-    double O3_removal_yearly;       // mol(O3)/m2/y
-    double O3_removed_mass_yearly;  // g(O3)/y
-    double O3_net_uptake_yearly;    // g(O3)/y
+    double leaf_area;                // m2
+    double leaf_dry_weight;          // g
+    double OFP_hourly;               // ug(O3)/h
+    double OFP_yearly;               // ug(O3)/y
+    double PM10_yearly;              // ug(PM10)/y
+    double O3_instantaneous;         // (nmol(O3)/m2/s) 
+    double O3_yearly;                // mol(O3)/m2/y
+    double O3_removal_yearly;        // mol(O3)/m2/y
+    double O3_removed_mass_yearly;   // g(O3)/y
+    double O3_net_uptake_yearly;     // g(O3)/y
 };
 
 // ---------------------------------
@@ -83,10 +81,10 @@ double leaf_area_func(struct Tree * tree) {
     double H = tree->crown_height;
     double D = tree->crown_diameter;
     double S = tree->shading_factor;
-    double C = PI * D * (H + D) / 2;            // C is based on the outer surface area of the tree crown.
+    double C = PI * D * (H + D) / 2;   // C is based on the outer surface area of the tree crown.
     
     // Calculation of the leaf area 
-    double ln_LA = -4.33 + 0.29 * H + 0.73 * D + 5.72 * S - 0.01 * C;   // Regression equation
+    double ln_LA = -4.33 + 0.29 * H + 0.73 * D + 5.72 * S - 0.01 * C;   // regression equation
     double LA = exp(ln_LA);
 
     // Adding the calculated leaf area to the tree structure 
@@ -164,7 +162,7 @@ double PM10_yearly_func(struct Tree * tree, double conc_PM10_city) {
 };
 
 // -----------------------------------------------------------------------------
-// Instanatneous stomatal O3 flux (for one tree, per second) : O3_instantaneous
+// Instantaneous stomatal O3 flux (for one tree, per second) : O3_instantaneous
 // -----------------------------------------------------------------------------
 
 double O3_instantaneous_func(struct Tree * tree, double conc_O3_city) {
@@ -205,7 +203,7 @@ double O3_yearly_func(struct Tree * tree) {
 // Total potential O3 removal (for one tree, per year) : O3_removal_yearly
 // ------------------------------------------------------------------------
 
-// We assumed that the stomatal O3 flux corresponds to 30 % of the total potential O3 removal.
+// We assumed that the stomatal O3 flux corresponds to 30% of the total potential O3 removal.
 
 double O3_removal_yearly_func(struct Tree * tree) {
     // Parameters
