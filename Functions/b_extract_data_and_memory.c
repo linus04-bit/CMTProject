@@ -46,7 +46,6 @@ int readwriteDocument(char* filename, struct Tree *trees, int size_org){
         printf("Error opening file\n");
         exit(-1);
     }
-    char* data;
     int index = 0;
     printf("File opening worked\n");
     static char line[MAX_Line_Length];
@@ -56,17 +55,17 @@ int readwriteDocument(char* filename, struct Tree *trees, int size_org){
     while(index<=size_org){
         fgets(line, sizeof(line), file);
         line[strcspn(line, "\n")] = '\0';
-        char * substring = strstr(line, ";");// will send me a last_substringer to the first ;
+        char * substring = strstr(line, ";");// will send a substringe to the first ;
         int position =0;
         int last_position = 0;
         int matches = 1;
-        // as long as a substring is found, this while will turn
+        // This loop turns, as long as a substring is found
         while(substring){
             last_position = position;
             position = substring - line;
             char* substring_saved = substring;
             substring = strstr(substring+1, ";");
-            //species name
+            //species name -> amount of matches needs to be counted in the actual csv document
             if(matches == 2){
                 trees[index].species_name = my_strndup(line+last_position + 1, position - last_position-1);
             }
@@ -83,7 +82,7 @@ int readwriteDocument(char* filename, struct Tree *trees, int size_org){
             if(matches == 11){
                 double value = atof(my_strndup(line+last_position + 1, position - last_position-1));
             }
-            //Adding attributes depending on if its a evergreen or broadleaf. Values found in table and Kofel
+            //Adding attributes depending on if its a evergreen or broadleaf.
             if(matches == 23){
                 char* type = my_strndup(line+last_position + 1, position - last_position-1);
 
