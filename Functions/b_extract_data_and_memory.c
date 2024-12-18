@@ -17,8 +17,9 @@
 // This file contains the functions to read the CSV document with the trees in Geneva, as well as the functions to allocate and free memory.
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
-//------------for memory allocation of str into structure------------------------
-// This function is used within the readwriteDocument function to allocate memory for strings.
+// ---------------------------------------------------------------------------------------------------------------------------
+// my_strndup: This function is used within the readwriteDocument function to allocate memory for strings into the structure.
+// ---------------------------------------------------------------------------------------------------------------------------
 
 char *my_strndup(const char *str, size_t n) {
     // Allocate memory for the substring + 1 for null terminator
@@ -32,47 +33,55 @@ char *my_strndup(const char *str, size_t n) {
     return dup;
 }
 
-//-------------------------------------------------------------------------------
-//This function opens the file and saves it to a predefined list of structures. 
-// size_org is length of tree array and hence the amount of values we read in from our file
-int readwriteDocument(char* filename, struct Tree *trees, int size_org){
-    // open csv file
+// -----------------------------------------------------------------------------------------------------------------------------------
+// readwriteDocument: This function opens the CSV file and saves the data about the trees into a predefined array of Tree structures. 
+// size_org is the length of the trees array and hence the amount of values we read in from our CSV file.
+// -----------------------------------------------------------------------------------------------------------------------------------
+
+int readwriteDocument(char *filename, struct Tree *trees, int size_org) {
+    // Open the CSV file
    FILE *file = fopen(filename, "r");
     if (file == NULL) {
         printf("Error opening file\n");
         exit(-1);
     }
-    char* data;
+    
+    char *data;
     int index = 0;
     printf("File opening worked\n");
     static char line[MAX_Line_Length];
-    // read in first line
+    
+    // Read in first line
     fgets(line, sizeof(line), file);
-    //read in the rest and parse it
-    while(index<=size_org){
+    
+    // Read in the rest and parse it
+    while(index <= size_org) {
         fgets(line, sizeof(line), file);
         line[strcspn(line, "\n")] = '\0';
-        char * substring = strstr(line, ";");// will send me a last_substringer to the first ;
-        int position =0;
+        char *substring = strstr(line, ";");    // will send me a last_substringer to the first 
+        int position = 0;
         int last_position = 0;
         int matches = 1;
-        // as long as a substring is found, this while will turn
-        while(substring){
+        
+        // This will turn as long as a substring is found
+        while(substring) {
             last_position = position;
             position = substring - line;
-            char* substring_saved = substring;
+            char *substring_saved = substring;
             substring = strstr(substring+1, ";");
-            //species name
-            if(matches == 2){
-                trees[index].species_name = my_strndup(line+last_position + 1, position - last_position-1);
+            
+            // Species name
+            if(matches == 2) {
+                trees[index].species_name = my_strndup(line + last_position + 1, position - last_position - 1);
             }
-            // crown height
+            
+            // Crown height
             double trunk_height = 0.0;
-            if(matches == 9){
-                trunk_height = atof(my_strndup(line+last_position + 1, position - last_position-1) );
+            if(matches == 9) {
+                trunk_height = atof(my_strndup(line + last_position + 1, position - last_position - 1));
             }
-            if(matches == 10){
-                double total_height = atof(my_strndup(line+last_position + 1, position - last_position-1));
+            if(matches == 10) {
+                double total_height = atof(my_strndup(line + last_position + 1, position - last_position - 1));
                 trees[index].crown_height = total_height - trunk_height;
             }
             //crown diameter
