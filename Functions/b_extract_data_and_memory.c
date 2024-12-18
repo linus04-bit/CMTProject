@@ -35,10 +35,9 @@ char *my_strndup(const char *str, size_t n) {
 
 // -----------------------------------------------------------------------------------------------------------------------------------
 // readwriteDocument: This function opens the CSV file and saves the data about the trees into a predefined array of Tree structures. 
-// size_org is the length of the trees array and hence the amount of values we read in from our CSV file.
 // -----------------------------------------------------------------------------------------------------------------------------------
 
-int readwriteDocument(char *filename, struct Tree *trees, int size_org) {
+int readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // size_org is the length of the trees array and hence the amount of values we read in from the CSV file.
     // Open the CSV file
    FILE *file = fopen(filename, "r");
     if (file == NULL) {
@@ -68,7 +67,7 @@ int readwriteDocument(char *filename, struct Tree *trees, int size_org) {
             last_position = position;
             position = substring - line;
             char *substring_saved = substring;
-            substring = strstr(substring+1, ";");
+            substring = strstr(substring + 1, ";");
             
             // Species name
             if(matches == 2) {
@@ -84,58 +83,68 @@ int readwriteDocument(char *filename, struct Tree *trees, int size_org) {
                 double total_height = atof(my_strndup(line + last_position + 1, position - last_position - 1));
                 trees[index].crown_height = total_height - trunk_height;
             }
-            //crown diameter
-            if(matches == 11){
-                double value = atof(my_strndup(line+last_position + 1, position - last_position-1));
+            
+            // Crown diameter
+            if(matches == 11) {
+                double value = atof(my_strndup(line + last_position + 1, position - last_position - 1));
             }
-            //Adding attributes depending on if its a evergreen or broadleaf. Values found in table and Kofel
-            if(matches == 23){
-                char* type = my_strndup(line+last_position + 1, position - last_position-1);
-
-                if(strcmp(type,"Feuillus") == 0){
+            
+            // Adding attributes based on whether the tree is evergreen or deciduous.
+            // Values found in tables and in Kofel, Donato, et al.
+            if(matches == 23) {
+                char *type = my_strndup(line + last_position + 1, position - last_position - 1);
+                
+                if(strcmp(type, "Feuillus") == 0) {
                     trees[index].leaves_days = LEAVE_DAYS_BROADLEAVES;
                     trees[index].stomatal_conductance = STOMATAL_COND_BROADLEAVES; 
                 }
-                if(strcmp(type,"Conifères") == 0){
+                if(strcmp(type,"Conifères") == 0) {
                     trees[index].leaves_days = LEAVE_DAYS_EVERGREENS;
                     trees[index].stomatal_conductance = STOMATAL_COND_EVERGREENS;
                 }
             }
-            // postition, coordinate system used is LV95
-            if(matches == 29){
-                trees[index].position_x = atof(my_strndup(line+last_position + 1, position - last_position-1));
-                trees[index].position_y = atof(my_strndup(line+position+ 1, strlen(line) - position));
+            
+            // Postition; coordinate system used is LV95
+            if(matches == 29) {
+                trees[index].position_x = atof(my_strndup(line + last_position + 1, position - last_position - 1));
+                trees[index].position_y = atof(my_strndup(line + position+ 1, strlen(line) - position));
             }
-            matches +=1;
+            matches += 1;
         }
         index += 1;
     }
     fclose(file);
-    //calcualte average for trees that don't have a measured value:
+    
+    // Calculation of the average height and crown diameter for trees missing these measured values in the CSV file 
     int count_h = 0;
     int count_d = 0;
     double sum_h = 0.0;
     double sum_d = 0.0;
-    for(int i=0; i<size_org; i++){
-        if(trees[i].crown_height != 0.0){
+    
+    for(int i = 0; i < size_org; i++) {
+        if(trees[i].crown_height != 0.0) {
             count_h += 1;
             sum_h += trees[i].crown_height;
         }
-        if(trees[i].crown_diameter != 0.0){
+        if(trees[i].crown_diameter != 0.0) {
             count_d += 1;
             sum_d += trees[i].crown_diameter;
         }
     }
-    double average_height = sum_h/count_h;
-    double average_crown_diameter = sum_d/count_d;
-    for(int i=0; i<size_org; i++){
-        if(trees[i].crown_height==0.0){
+    
+    double average_height = sum_h/count_h;           
+    double average_crown_diameter = sum_d/count_d; 
+
+    // Adding the average values to the tree structures of the trees missing these measured values in the CSV file
+    for(int i = 0; i < size_org; i++){
+        if(trees[i].crown_height == 0.0) {
             trees[i].crown_height = average_height;
         }
-        if(trees[i].crown_diameter==0.0){
+        if(trees[i].crown_diameter == 0.0) {
             trees[i].crown_diameter = average_crown_diameter;
         }
     }
+    
     //writes content to csv file --> not necessary but helps to check for errors
     FILE *file_out = fopen("Results/trees_GE.csv", "w"); // Open the file in write mode
 
