@@ -37,11 +37,11 @@ double min(double *list, int size_trees_array) {
     return min;
 }
 
-// ------------------------------------------------------------------------------------------------------
-// extract_coordinates: This function writes the coordinates into the structure as an array of doubles.
-// Input: Tree array, array of coordinates in x and y and size of the tree array
+// ----------------------------------------------------------------------------------------------------------
+// extract_coordinates: This function writes the coordinates into the Tree structure as an array of doubles.
+// Input: Tree array, array of coordinates in x and y, and size of the tree array
 // Output: None
-// ------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 void extract_coordinates(struct Tree *trees, double *x, double *y, int size_trees_array){
     for(int i = 0; i < size_trees_array; i++) {
@@ -53,7 +53,7 @@ void extract_coordinates(struct Tree *trees, double *x, double *y, int size_tree
 // --------------------------------------------------------------------------------------------------------------------------
 // coordinates_adaption: This function adds an additional field to the Tree structure and adjusts the tree positions so that 
 //                       the origin of the coordinate system is set at the tree located at the most southwestern point.
-// Input: Tree array, array of coordinates in x and y and size of the tree array
+// Input: Tree array, array of coordinates in x and y, and size of the tree array
 // Output: None
 // -------------------------------------------------------------------------------------------------------------------------- 
 
@@ -97,26 +97,26 @@ int distance(double *points, int size_trees_array, int gridsize) {
     return (int)ceil((max_p - min_p)/gridsize);
 }
 
+// ------------- Calculations -----------------------------
 
-//-------------calculations-----------------------------
-
+// --------------------------------------------------------------------------------------------------------------------------------------------------------
 // calculations: This function calculates all the properties necessary to find the PM10 deposition, the OFP and the O3 removal. 
 //               It applies the formulas of the model to all the trees present in a 100 x 100 m square field and adds the sum of 
 //               the results to the corresponding grid cell.
 // Inputs: Size of tree array, distances of grid in x and y direction, previously allocated grids, tree array, pollutant concentrations, size of gridcells
 // Ouputs: None
+// --------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-void calculations(int size_trees_array_filtered_trees, int length_y,int length_x, double** grid_OFP, double** grid_PM10, double** grid_O3, double** grid_O3_net_uptake, struct Tree *trees, double conc_PM10_city, double conc_O3_city, int gridsize){
-    for(int i = 0; i < length_y; i++){
-        for(int j = 0; j<length_x; j++){
+void calculations(int size_trees_array_filtered_trees, int length_y, int length_x, double **grid_OFP, double **grid_PM10, double **grid_O3, double **grid_O3_net_uptake, struct Tree *trees, double conc_PM10_city, double conc_O3_city, int gridsize) {
+    for(int i = 0; i < length_y; i++) {
+        for(int j = 0; j < length_x; j++) {
             double OFP_tot = 0.0;
             double PM10_tot = 0.0;
             double O3_uptake_tot = 0.0;
             double O3_net_uptake_tot = 0.0;
 
-            for(int k = 0; k<size_trees_array_filtered_trees; k++){
-                if((trees[k].position_x_grid <=j*gridsize+gridsize && trees[k].position_x_grid >=j*gridsize) &&(trees[k].position_y_grid >=i*gridsize && trees[k].position_y_grid <= i*gridsize+ gridsize)){ //tree needs to be within the grid cell that we are currently analyzing
+            for(int k = 0; k < size_trees_array_filtered_trees; k++) {
+                if((trees[k].position_x_grid <= j * gridsize + gridsize && trees[k].position_x_grid >= j * gridsize) && (trees[k].position_y_grid >= i * gridsize && trees[k].position_y_grid <= i * gridsize + gridsize)) {  // tree needs to be within the grid cell that we are currently analyzing
                     // Apply the functions defined in a_model_functions.c to each tree present in a square field
                     leaf_area_func(&trees[k]);
                     leaf_dry_weight_func(&trees[k]);
