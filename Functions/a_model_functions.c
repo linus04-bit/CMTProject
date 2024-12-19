@@ -76,7 +76,7 @@ struct Tree {
 // Leaf area of a single tree : LA
 // --------------------------------
 
-double leaf_area_func(struct Tree * tree) {
+void leaf_area_func(struct Tree * tree) {
     // Parameters 
     double H = tree->crown_height;
     double D = tree->crown_diameter;
@@ -95,7 +95,7 @@ double leaf_area_func(struct Tree * tree) {
 // Leaf biomass / leaf dry weight : LW
 // ------------------------------------
 
-double leaf_dry_weight_func(struct Tree * tree) {
+void leaf_dry_weight_func(struct Tree * tree) {
     // Parameters 
     double LA = tree->leaf_area;
     double f = tree->conversion_factor;
@@ -111,7 +111,7 @@ double leaf_dry_weight_func(struct Tree * tree) {
 // Ozone-forming potential (for one tree, per hour) : OFP_hourly
 // --------------------------------------------------------------
 
-double OFP_hourly_func(struct Tree * tree) {
+void OFP_hourly_func(struct Tree * tree) {
     // Parameters and calculation of the hourly ozone-forming potential
     double LW = tree->leaf_dry_weight;          
     double EF[3];
@@ -134,7 +134,7 @@ double OFP_hourly_func(struct Tree * tree) {
 // Annual ozone-forming potential (for one tree, per year) : OFP_yearly
 // ---------------------------------------------------------------------
 
-double OFP_yearly_func(struct Tree * tree) {
+void OFP_yearly_func(struct Tree * tree) {
     // Parameters and calculation of the yearly ozone-forming potential
     double OFP_hourly = tree->OFP_hourly;
     int leaves_days = tree->leaves_days;
@@ -148,7 +148,7 @@ double OFP_yearly_func(struct Tree * tree) {
 // Estimation of the yearly PM10 deposition (for one tree, per year) : PM10_yearly
 // --------------------------------------------------------------------------------
 
-double PM10_yearly_func(struct Tree * tree, double conc_PM10_city) {
+void PM10_yearly_func(struct Tree * tree, double conc_PM10_city) {
     // Parameters
     double conc_PM10 = conc_PM10_city;     // ug(PM10)/m3   mean yearly PM10 concentration
     double LA = tree->leaf_area;           // m2            total leaf area of a tree   
@@ -165,7 +165,7 @@ double PM10_yearly_func(struct Tree * tree, double conc_PM10_city) {
 // Instantaneous stomatal O3 flux (for one tree, per second) : O3_instantaneous
 // -----------------------------------------------------------------------------
 
-double O3_instantaneous_func(struct Tree * tree, double conc_O3_city) {
+void O3_instantaneous_func(struct Tree * tree, double conc_O3_city) {
     // Parameters 
     double stomatal_conductance = tree->stomatal_conductance;       
     double conc_O3 = conc_O3_city * pow(10, -6);
@@ -187,7 +187,7 @@ double O3_instantaneous_func(struct Tree * tree, double conc_O3_city) {
 // Total annual cumulated O3 flux (for one tree, per year) : O3_yearly
 // --------------------------------------------------------------------
 
-double O3_yearly_func(struct Tree * tree) {
+void O3_yearly_func(struct Tree * tree) {
     // Parameters 
     double O3_instantaneous = tree->O3_instantaneous;
     int leaves_days = tree->leaves_days;
@@ -205,7 +205,7 @@ double O3_yearly_func(struct Tree * tree) {
 
 // We assumed that the stomatal O3 flux corresponds to 30% of the total potential O3 removal.
 
-double O3_removal_yearly_func(struct Tree * tree) {
+void O3_removal_yearly_func(struct Tree * tree) {
     // Parameters
     double O3_yearly = tree->O3_yearly;
 
@@ -220,7 +220,7 @@ double O3_removal_yearly_func(struct Tree * tree) {
 // Annual mass of removed O3 (for one tree, per year) : O3_removed_mass_yearly
 // ----------------------------------------------------------------------------
 
-double O3_removed_mass_yearly_func(struct Tree * tree) {
+void O3_removed_mass_yearly_func(struct Tree * tree) {
     // Parameters 
     double O3_removal_yearly = tree->O3_removal_yearly;
     double leaf_area = tree->leaf_area;
@@ -236,7 +236,7 @@ double O3_removed_mass_yearly_func(struct Tree * tree) {
 // Net ozone uptake (for one tree, per year) : O3_net_uptake_yearly
 // -----------------------------------------------------------------
 
-double O3_net_uptake_yearly_func(struct Tree * tree) {
+void O3_net_uptake_yearly_func(struct Tree * tree) {
     // Paramaters
     double O3_removed_mass_yearly = tree->O3_removed_mass_yearly;    // g(O3)/y
     double OFP_yearly = tree->OFP_yearly;                            // ug(O3)/y      

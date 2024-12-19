@@ -84,34 +84,22 @@ In the main directory are located:
 ## Instructions
 
 To reproduce the results depicted in the report, the following steps should be implemented:
-1. Open the terminal from the project root directory and navigate to the directory "*Functions*" in the terminal:
-    ```
-    cd Functions
-
-    ```
-
-2. Compile the shared C library using one of the following commands:
+1. Open the terminal from the project root directory and compile the shared C library using one of the following commands:
 
     For Windows: 
     ```
-    gcc -shared -o main.dll main.c
+    gcc -shared -o Functions/main.dll Functions/main.c
 
     ```
     For MacOS: 
     ```
-    gcc -shared -o main.so main.c
+    gcc -shared -o Functions/main.so Functions/main.c
 
     ```
 
-4. Navigate back to the main root directory: 
-    ```
-    cd .. 
+2. Open the file "*execution_file_windows.py*" (Windows) or "*execution_file_mac.py*" (MacOS). The file contains commented instructions for the user to modify certain input parameters. Modify as desired and save the file. The values by default correspond to the values used in the report.
 
-    ```
-
-5. Open the file "*execution_file_windows.py*" (Windows) or "*execution_file_mac.py*" (MacOS). The file contains commented instructions for the user to modify certain input parameters. Modify as desired and save the file. The values by default correspond to the values used in the report.
-
-6. The above mentioned file can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*". For 120'000 trees, the program will take approximately 32 minutes:
+3. The above mentioned file can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*". For 120'000 trees, the program will take approximately 32 minutes:
     ```
     python3 .\execution_file_windows.py
 
@@ -121,10 +109,10 @@ To reproduce the results depicted in the report, the following steps should be i
 
 Versions of Python and C used are as follows:
 ```
-$ python --version
+python --version
 Python 3.12.8
 
-$ gcc --version
+gcc --version
 gcc.exe (Rev3, Built by MSYS2 project) 14.1.0
 ```
 
