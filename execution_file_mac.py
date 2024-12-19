@@ -45,11 +45,11 @@ start = time.time()
 # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Defining the functions of C in Python
 # main_func1: This function will read the CSV document containing data about the trees in the canton and write its content into a CSV file and an array containing Tree structures.
-# main_func2 will be defined later, because the length of the array containing the filtered trees is necessary.
+# main_func2 will be defined later because the length of the array containing the filtered trees is necessary.
 # ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 main_func1 = clibrary.main_function1
-main_func1.argtypes = [ctypes.c_char_p, ctypes.POINTER(NR_LINES_GE*Tree), ctypes.c_int]
+main_func1.argtypes = [ctypes.c_char_p, ctypes.POINTER(NR_LINES_GE * Tree), ctypes.c_int]
 main_func1.restype = None
 
 # -------------------------------------------------------------------------- 
@@ -150,10 +150,10 @@ for i in range(NR_LINES_GE):
 # -------------
 
 # Getting paths of necessary CSV data documents
-Shading = os.path.join(path,'Data/shading_coeff.csv' )
-EF = os.path.join(path,'Data/EF.csv' )
-conversion_factor = os.path.join(path,'Data/conversion_factor.csv' )
-MIR = os.path.join(path,'Data/MIR.csv' )
+Shading = os.path.join(path,'Data/shading_coeff.csv')
+EF = os.path.join(path,'Data/EF.csv')
+conversion_factor = os.path.join(path,'Data/conversion_factor.csv')
+MIR = os.path.join(path,'Data/MIR.csv')
 
 # Launch filtration
 np_filtered_trees = np.empty(0, dtype=tree_dtype)
@@ -172,7 +172,7 @@ free_tree_array1(trees)
 
 # Defining main_func2 (needs to be defined down here because of size_filtered_trees)
 main_func2 = clibrary.main_function2
-main_func2.argtypes = [ctypes.POINTER(size_filtered_trees*Tree), 
+main_func2.argtypes = [ctypes.POINTER(size_filtered_trees * Tree), 
                         ctypes.c_int,
                         ctypes.POINTER(ctypes.POINTER(ctypes.POINTER(ctypes.c_double))),
                         ctypes.POINTER(ctypes.POINTER(ctypes.POINTER(ctypes.c_double))),
@@ -274,13 +274,13 @@ plt.imshow(grid_O3_np, origin='lower', cmap='YlGnBu', interpolation='nearest', n
 plt.title("Yearly amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
-cbar = plt.colorbar(label = "O3_removed_mass values", ticks = [1,2,3,4,5,6,7,8])
+cbar = plt.colorbar(label = "O3_removed_mass values", ticks = [1, 2, 3, 4, 5, 6, 7, 8])
 cbar.ax.set_yticklabels(['1', '2', '3', '4', '5', '6', '7', '8'])
 plt.savefig(f'Results/O3_map_{NR_LINES_GE}_indices.png')
 
 # O3 net uptake 
 plt.clf()
-plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='afmhot', interpolation= 'nearest', norm = SymLogNorm(linthresh=10, vmin=O3_net_uptake_min, vmax=0))
+plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='afmhot', interpolation='nearest', norm = SymLogNorm(linthresh=10, vmin=O3_net_uptake_min, vmax=0))
 plt.title("Yearly net amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
@@ -303,8 +303,6 @@ summary.write(f"Run time: {end- start}s")
 summary.close()
 print("Done")
 
-
-#-------------------------------------------------------------------------------------------------
-#                                       end
-#-------------------------------------------------------------------------------------------------
-
+# ----
+# End
+# ----
