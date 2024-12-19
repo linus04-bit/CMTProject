@@ -11,15 +11,16 @@
 #define STOMATAL_COND_EVERGREENS 16.896          // value taken from Zeppel et al.
 #define STOMATAL_COND_BROADLEAVES 72.637         // value taken from Zeppel et al.
 
-//-------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------
 // This file contains the functions to read the CSV document with the trees in Geneva, as well as the functions to allocate and free memory.
-//-------------------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------------
+
 
 // ---------------------------------------------------------------------------------------------------------------------------
 // my_strndup: This function is used within the readwriteDocument function to allocate memory for strings into the structure.
 // ---------------------------------------------------------------------------------------------------------------------------
 
-char* my_strndup(const char* str, size_t n) {
+char *my_strndup(const char *str, size_t n) {
     // Allocate memory for the substring + 1 for null terminator
     char *dup = malloc(n + 1);
     if (dup == NULL) {
@@ -33,12 +34,12 @@ char* my_strndup(const char* str, size_t n) {
 
 // -----------------------------------------------------------------------------------------------------------------------------------
 // readwriteDocument: This function opens the CSV file and saves the data about the trees into a predefined array of Tree structures.
-//Input: Filepath, allocated empty tree array, amount of trees for computations
-//Output: Nothing
+// Input: Filepath, allocated empty tree array, amount of trees for computations
+// Output: Nothing
 // -----------------------------------------------------------------------------------------------------------------------------------
 
 void readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // size_org is the length of the trees array and hence the amount of values we read in from the CSV file.
-    // Open the CSV file
+   // Open the CSV file
    FILE *file = fopen(filename, "r");
     if (file == NULL) {
         printf("Error opening file\n");
@@ -55,22 +56,23 @@ void readwriteDocument(char *filename, struct Tree *trees, int size_org) {    //
     while(index <= size_org) {
         fgets(line, sizeof(line), file);
         line[strcspn(line, "\n")] = '\0';
-        char * substring = strstr(line, ";");// will send a substring to the first ;
+        char *substring = strstr(line, ";");  // will send a substring to the first ;
         int position = 0;
         int last_position = 0;
         int matches = 1;
 
-        // This loop turns, as long as a substring is found
-        while(substring){
+        // This loop turns as long as a substring is found
+        while(substring) {
             last_position = position;
             position = substring - line;
-            char* substring_saved = substring;
+            char *substring_saved = substring;
             substring = strstr(substring+1, ";");
 
-            //species name -> amount of matches needs to be counted in the actual csv document
-            if(matches == 2){
-                trees[index].species_name = my_strndup(line+last_position + 1, position - last_position-1);
+            // Species name -> amount of matches needs to be counted in the actual CSV document
+            if(matches == 2) {
+                trees[index].species_name = my_strndup(line + last_position + 1, position - last_position - 1);
             }
+            
             // Crown height
             double trunk_height = 0.0;
             if(matches == 9) {
@@ -87,7 +89,7 @@ void readwriteDocument(char *filename, struct Tree *trees, int size_org) {    //
                 trees[index].crown_diameter = value;
             }
 
-            // Adding attributes based on whether the tree is evergreen or deciduous.
+            // Adding attributes to the Tree structure based on whether the tree is evergreen or deciduous.
             // Values found in tables and in Kofel, Donato, et al.
             if(matches == 23) {
                 char *type = my_strndup(line + last_position + 1, position - last_position - 1);
