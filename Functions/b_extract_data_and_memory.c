@@ -20,7 +20,7 @@
 // ---------------------------------------------------------------------------------------------------------------------------
 
 char *my_strndup(const char *str, size_t n) {
-    // Allocate memory for the substring and for null terminator
+    // Allocate memory for the substring and for the null terminator
     char *dup = malloc(n + 1);
     if (dup == NULL) {
         return NULL;  // Return NULL if malloc fails
