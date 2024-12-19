@@ -7,7 +7,7 @@ Given a certain ozone and PM10 concentration, this program displays graphically 
 
 This program will:
 1. Read in data concerning the location as well as certain properties of the trees located within the canton of Geneva. This data is provided by *Le Système d’Information du Territoire à Genève (SITG)*
-2. Filter through the data and add scientific data necessary for the following calculations. Tree species, for which no data was found, were discarded.
+2. Filter through the data and add scientific data necessary for the following calculations. Tree genera, for which no data was found, were discarded.
 3. Compute the yearly ozone forming potential, PM10 and ozone uptake and net ozone uptake aggregated over 100mx100m grid cells.
 4. Calculate total OFP, total uptake of PM10 and ozone and total net uptake of ozone.
 5. Display the found results graphically and save them as .png files.
@@ -60,7 +60,6 @@ In the directory "*Functions/*" are located:
 - "*e_filter_trees.py*":
     - Reads in multiple csv such as "*Data/conversion_factor.csv*", "*EF.csv*", "*MIR.csv*" and "*shading_coeff.csv*". 
     - Contains functions that filter through first array and create second array of tree displaying scientific data, while adding that data to the array.
-- "*g_pyfunctions.py*":
     - Contains functions to transform a c_POINTER(c_POINTER(double)) to a two-dimensional np.array.
 - "*h_structures.py*":
     -Contains structures used in python.
