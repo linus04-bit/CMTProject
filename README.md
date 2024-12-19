@@ -35,7 +35,7 @@ Outputs:
 - "*Results/PM10_{map_amount_of_trees}_indices.png*" is a figure depicting the yearly PM10 uptake distribution within the canton depending on grid indices.
 - "*Results/O3_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly ozone uptake distribution within the canton depending on the grid indices.
 - "*Results/O3_net_uptake_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly net ozone uptake distribution within the canton depending on the grid indices.
-- "*Results/summary.txt*" contains summary of parameters used and the total values computed, as well as the runtime of the program.
+- "*Results/summary.txt*" contains summary of parameters used and the total, as well as the maximal values computed. It also contains the computation time of the program.
 - "*Results/trees_GE.csv*" is a semicolon-delimited file. It contains the first information regarding the trees within our scope of our analysis. It serves as control file and can be deleted as used.
 
 
@@ -112,7 +112,7 @@ To reproduce the results depicted in the report, the following steps should be i
 
 5. Open the file "*execution_file_windows.py*" (Windows) or "*execution_file_mac.py*" (MacOS). The file contains commented instructions for the user to modify certain input parameters. Modify as desired and save the file. The values by default correspond to the values used in the report.
 
-6. The above mentioned file can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*":
+6. The above mentioned file can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*". For 120'000 trees, the program will take approximately 32 minutes:
     ```
     python3 .\execution_file_windows.py
 

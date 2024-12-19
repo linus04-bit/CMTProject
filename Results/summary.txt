@@ -3,8 +3,12 @@ Concentration of Ozone in microgrammes per m^3: 48.09
 Amount of trees analyzed: 120000
 Size of grid cells: 100
 Amount of trees used for calculations: 98107
-Total amount of ozone emitted: 71294.0903791815 kg/y
+Total amount of OFP: 71294.0903791815 kg/y
 Total amount of PM10 absorbed: 2297.9376063732166 kg/y
 Total amount of ozone absorbed: 2951.8066727562964 kg/y 
 Total net ozone absorbed(+)/emitted(-): -68342.28370642522 kg/y
-Run time: 1211.734799861908s
+Max amount of OFP for one gridcell: 831.6794269771993 kg/y
+Max amount of PM10 absorbed for one gridcell: 4.56002941122028 kg/y
+Max amount of ozone absorbed for one gridcell: 8.180405671727582 kg/y
+Max amount of net ozone emitted for one gridcell: -827.0622775756586 kg/y
+Run time: 1439.626821756363s
