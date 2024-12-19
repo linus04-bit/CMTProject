@@ -3,22 +3,22 @@
 
 ## Project Description
 
-Given a certain ozone and PM10 concentration, this program displays graphically the yearly ozone forming potential (OFP), the uptake of PM10 and ozone as well as the net ozone uptake of the trees located within the canton of Geneva. The net uptake describes the difference between ozone uptake and OFP.
+Given a certain ozone and PM10 concentration, this program displays graphically the yearly uptake of PM10, ozone-forming potential (OFP), removal of ozone, and net O3 uptake by the trees located within the canton of Geneva. The net uptake of ozone describes the difference between the ozone removal and the OFP.
 
 This program will:
-1. Read in data concerning the location as well as certain properties of the trees located within the canton of Geneva. This data is provided by *Le Système d’Information du Territoire à Genève (SITG)*
-2. Filter through the data and add scientific data necessary for the following calculations. Tree genera, for which no data was found, were discarded.
-3. Compute the yearly ozone forming potential, PM10 and ozone uptake and net ozone uptake aggregated over 100mx100m grid cells.
-4. Calculate total OFP, total uptake of PM10 and ozone and total net uptake of ozone.
+1. Read in data concerning the location, as well as certain properties of the trees located within the canton of Geneva. This data is provided by *Le Système d’Information du Territoire à Genève (SITG)*.
+2. Filter through that data and add scientific parameters from other files necessary for the following calculations. Tree genera for which no data was found were discarded.
+3. Compute the yearly PM10 uptake, ozone-forming potential, ozone removal, and net ozone uptake, aggregated over 100 x 100 m grid cells.
+4. Calculate the total PM10 uptake, OFP, ozone removal and net ozone uptake for the whole grid corresponding to the canton.
 5. Display the found results graphically and save them as .png files.
 
 
 ## Project Structure
 
 - "*Data*" contains different input files
-- "*Functions*"contains the necessary code in C and Python, as well as the shared library between C and Python, once compiled. The files in this folder should not be modified.
-- "*Results*" contains the created graphs, a csv file containing the data taken from the first input file, as control tool, and a summary file containing most important informations, as well as total values of OFP, PM10 and ozone uptake and net ozone uptake.
-- "*execution_file_windows.py*" or "*execution_file_mac.py*" is the python file that can be modified and needs to be run in order to read in the data, compute and display the results. Depending on the operating system, a different file needs to be used ( *execution_file_windows.py* for windows,  *execution_file_mac.py* for MacOS and Linux).
+- "*Functions*" contains the necessary code in C and Python, as well as the shared library between C and Python, once compiled. The files in this folder should not be modified.
+- "*Results*" contains the created graphs, a CSV file containing the data taken from the first input file as a control tool, and a summary file with the most important information, as well as the total values of PM10, OFP, ozone removal and net ozone uptake.
+- "*execution_file_windows.py*" or "*execution_file_mac.py*" is the Python file that can be modified and needs to be run in order to read in the data, compute and display the results. Depending on the operating system, a different file needs to be used (*execution_file_windows.py* for windows,  *execution_file_mac.py* for MacOS and Linux).
 
 
 ## Inputs and Outputs
@@ -31,54 +31,54 @@ Inputs:
 - "*Data/shading_coeff.csv.*" is a semicolon-delimited file.
 
 Outputs: 
-- "*Results/OFP_{map_amount_of_trees}_indices.png*" is a figure depicting the yearly ozone forming potential distribution within the canton depending on the grid indices. 
-- "*Results/PM10_{map_amount_of_trees}_indices.png*" is a figure depicting the yearly PM10 uptake distribution within the canton depending on grid indices.
-- "*Results/O3_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly ozone uptake distribution within the canton depending on the grid indices.
+- "*Results/OFP_{map_amount_of_trees}_indices.png*" is a figure depicting the yearly ozone-forming potential distribution within the canton depending on the grid indices. 
+- "*Results/PM10_{map_amount_of_trees}_indices.png*" is a figure depicting the yearly PM10 uptake distribution within the canton depending on the grid indices.
+- "*Results/O3_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly ozone removal distribution within the canton depending on the grid indices.
 - "*Results/O3_net_uptake_map_{amount_of_trees}_indices.png*" is a figure depicting the yearly net ozone uptake distribution within the canton depending on the grid indices.
-- "*Results/summary.txt*" contains summary of parameters used and the total, as well as the maximal values computed. It also contains the computation time of the program.
-- "*Results/trees_GE.csv*" is a semicolon-delimited file. It contains the first information regarding the trees within our scope of our analysis. It serves as control file and can be deleted as used.
+- "*Results/summary.txt*" contains a summary of the parameters used, along with the total and maximal values computed. It also includes the computation time of the program.
+- "*Results/trees_GE.csv*" is a semicolon-delimited file. It contains the initial information regarding the trees within the scope of our analysis. It serves as a control file and can be deleted once used.
 
 
 ## Implementation Details
-- Python calls a function in C reading the data provided by the canton and saving the data in the form of an array in Python.
-- Python filters through this array by creating a new array and adding certain parameters to it.
-- Python calls function in C that computes the necessary values.
-- Python takes care of the visualisation.
+- Python calls a C function reading the tree data provided by the canton of Geneva and saving the data as an array in Python.
+- Python filters the array, creating a new one and adding certain parameters.
+- Python calls a C function that computes the necessary values.
+- Python takes care of the visualization.
 
 **Structure**
 
 In the directory "*Functions/*" are located:
 - "*a_model_functions.c*"
-    - Contains tree structure used throughout computation
-    - Contains necessary functions used for later computation of modellized values
+    - Contains a Tree structure used throughout the computation.
+    - Contains the necessary functions used for the later computation of modeled values.
 - "*b_extract_data_and_memory.c*":
     - Imports "*a_model_functions*" as a module.
-    - Contains function reading the data and saving it to an array as well as all necessary functions regarding memory allocation and liberation.
+    - Contains a function that reads the data and saves it to an array, as well as all necessary functions regarding memory allocation and liberation.
 - "*d_grid_functions.c*":
     - Imports "*b_extract_data_and_memory.c*" as a module.
     - Contains functions computing the data for the final grid cells.
 - "*e_filter_trees.py*":
-    - Reads in multiple csv such as "*Data/conversion_factor.csv*", "*EF.csv*", "*MIR.csv*" and "*shading_coeff.csv*". 
-    - Contains functions that filter through first array and create second array of tree displaying scientific data, while adding that data to the array.
+    - Reads in multiple CSV files such as "*Data/conversion_factor.csv*", "*EF.csv*", "*MIR.csv*" and "*shading_coeff.csv*". 
+    - Contains functions that filter the initial array of trees and create a second array containing only those trees for which the necessary scientific data is available, while adding that data to the array."
     - Contains functions to transform a c_POINTER(c_POINTER(double)) to a two-dimensional np.array.
 - "*h_structures.py*":
-    -Contains structures used in python.
+    - Contains structures used in Python.
 - "*main.c*":
     - Imports "*d_grid_functions.c*" as a module.
-    - File that's used to create the shared library between Python and C.
-    - Contains two functions, that are called from Python. Performs all necessary computations, by calling functions defined in mentioned files.
-    - Writes data from "*SIPV_ICA_ARBRE_ISOLE.csv*" to "*Results/trees_GE.txt*"
+    - File that is used to create the shared library between Python and C.
+    - Contains two functions that are called from Python. Performs all necessary computations by calling functions defined in mentioned files.
+    - Writes data from "*SIPV_ICA_ARBRE_ISOLE.csv*" to "*Results/trees_GE.txt*".
 
 In the main directory are located:
 - "*execution_file_windows.py*": 
-    - Main execution file for windows
-    - Calls "*Functions/main.c*" as a module using a shared library 
-    - Implements functins written in C and calls them from python
+    - Main execution file for Windows.
+    - Calls "*Functions/main.c*" as a module using a shared library. 
+    - Implements functions written in C and calls them from Python.
     - Contains parameters that can be changed as wished.
     - Writes a summary to "*Results/summary.txt*".
     - Plots results and saves graphs to "*Results/*".
 - "*execution_file_mac.py*": 
-    - Main execution file for MacOS
+    - Main execution file for MacOS.
     - Performs same tasks as "*execution_file_windows.py*".
 
 ## Instructions
@@ -99,7 +99,7 @@ To reproduce the results depicted in the report, the following steps should be i
 
 2. Open the file "*execution_file_windows.py*" (Windows) or "*execution_file_mac.py*" (MacOS). The file contains commented instructions for the user to modify certain input parameters. Modify as desired and save the file. The values by default correspond to the values used in the report.
 
-3. The above mentioned file can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*". For 120'000 trees, the program will take approximately 32 minutes:
+3. The file mentioned above can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*". For 120'000 trees, the program will take approximately 32 minutes:
     For Windows:
 
     ```
@@ -126,7 +126,7 @@ gcc.exe (Rev3, Built by MSYS2 project) 14.1.0
 
 ### Utilized python libraries:
 The libraries used in this project can be found in the "*requirements.txt*" file.
-This file was created using the follwing command:
+This file was created using the following command:
 
 ```
 pip freeze > requirements.txt
@@ -153,10 +153,10 @@ The values used for stomatal conductance come from [Zeppel, Melanie, et al."*Rep
 ## Formulae
 Certain variables, such as "*gridsize*" or "*leaves_days*", as well as  computations applied in this project come from [Kofel, Donato, et al."*Quantifying the impact of urban trees on air quality in Geneva, Switzerland*"EPFL 2023](https://infoscience.epfl.ch/entities/publication/40973cec-92bd-4171-b671-817c28a88f64). 
 
-The formuale used for the calculation of the net ozone uptake comes from [Manzini, Jacobo, et al. "*FlorTree: A unifying modelling framework for estimating the species-specific pollution removal by individual trees and shrubs, 2023.*"](https://www.sciencedirect.com/science/article/pii/S1618866723001383)
+The formula used for the calculation of the net ozone uptake comes from [Manzini, Jacobo, et al. "*FlorTree: A unifying modelling framework for estimating the species-specific pollution removal by individual trees and shrubs, 2023.*"](https://www.sciencedirect.com/science/article/pii/S1618866723001383)
 
 ## Usage of AI
-Artificial Intelligence such as ChatGPT(Version: GPT-4V (Vision) architecture) and Microsoft Copilot (Version: Microsoft Copilot, powered by GPT-4. (2024)) was used in this project. The main use concerned explaining certain code, such as the implementation of *ctypes*, and debugging of code. The function "*my_strndup*", located in "*Functions/b_extract_data_and_memory*", was entirely created by ChatGPT.
+Artificial Intelligence such as ChatGPT(Version: GPT-4V (Vision) architecture) and Microsoft Copilot (Version: Microsoft Copilot, powered by GPT-4. (2024)) was used in this project. The main purpose was to explain certain code, such as the implementation of ctypes, and to debug the code. The function "*my_strndup*", located in "*Functions/b_extract_data_and_memory*", was entirely created by ChatGPT.
 
 ## Reflection and Outlook
-Unfortunately, this program is strongly restricted by memory and time. This problem could be solved by using pandas instead of simple string comparison in the file "*/Functions/e_filter_trees.py*", such that the program runs faster and all of the data could be taken into account. The decision of using Ctypes in our python execution file helped us to run other computations very fast and dynamically allocate memory. This choice is therefore justified and recommendable. Moreover, one could decide to implement a computation for a two dimensional normal distribution or a latin hypercurbe in */Functions/b_extract_data_and_memory*" to calculate missing values for measured height and crown diameter.
+Unfortunately, this program is strongly restricted by memory and time. This problem could be solved by using pandas instead of simple string comparison in the file "*/Functions/e_filter_trees.py*", allowing the program to run faster and take all of the data into account. The decision to use ctypes in our Python execution file allowed us to run other computations very fast and dynamically allocate memory. This choice is therefore justified and recommended. Moreover, one could decide to implement a computation for a two dimensional normal distribution or a Latin hypercurbe in */Functions/b_extract_data_and_memory*" to calculate missing values for measured height and crown diameter of the trees.
