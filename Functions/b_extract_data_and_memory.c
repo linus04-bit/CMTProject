@@ -149,7 +149,7 @@ int readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // 
     // Check if the control file was opened successfully
     if (file_out == NULL) {
         printf("Error opening file!\n");
-        return 1;   // Return error code
+        exit(-1);
     }
 
     // Write the header row
