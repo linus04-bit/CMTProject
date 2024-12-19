@@ -97,8 +97,6 @@ int distance(double *points, int size_trees_array, int gridsize) {
     return (int)ceil((max_p - min_p)/gridsize);
 }
 
-// ------------- Calculations -----------------------------
-
 // --------------------------------------------------------------------------------------------------------------------------------------------------------
 // calculations: This function calculates all the properties necessary to find the PM10 deposition, the OFP and the O3 removal. 
 //               It applies the formulas of the model to all the trees present in a 100 x 100 m square field and adds the sum of 
