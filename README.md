@@ -101,7 +101,7 @@ To reproduce the results depicted in the report, the following steps should be i
 
 3. The above mentioned file can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*". For 120'000 trees, the program will take approximately 32 minutes:
     ```
-    python3 .\execution_file_windows.py
+    python3 execution_file_windows.py
 
     ```
 
