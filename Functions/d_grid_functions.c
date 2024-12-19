@@ -99,9 +99,10 @@ int distance(double *points, int size_trees_array, int gridsize) {
 
 
 //-------------calculations-----------------------------
-// This function calculates the necessary properties within 
-// a 100x100 square and writes that value to the corresponding 
-// element of our grid
+
+// calculations: This function calculates all the properties necessary to find the PM10 deposition, the OFP and the O3 removal. 
+//               It applies the formulas of the model to all the trees present in a 100 x 100 m square field and adds the sum of 
+//               the results to the corresponding grid cell.
 // Inputs: Size of tree array, distances of grid in x and y direction, previously allocated grids, tree array, pollutant concentrations, size of gridcells
 // Ouputs: None
 
@@ -116,7 +117,7 @@ void calculations(int size_trees_array_filtered_trees, int length_y,int length_x
 
             for(int k = 0; k<size_trees_array_filtered_trees; k++){
                 if((trees[k].position_x_grid <=j*gridsize+gridsize && trees[k].position_x_grid >=j*gridsize) &&(trees[k].position_y_grid >=i*gridsize && trees[k].position_y_grid <= i*gridsize+ gridsize)){ //tree needs to be within the grid cell that we are currently analyzing
-                    // functions are defined in a_model_functions.c
+                    // Apply the functions defined in a_model_functions.c to each tree present in a square field
                     leaf_area_func(&trees[k]);
                     leaf_dry_weight_func(&trees[k]);
                     OFP_hourly_func(&trees[k]);
