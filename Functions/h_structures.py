@@ -1,8 +1,9 @@
 import ctypes
 import numpy as np
-#---------------------------------------------------------------------
-#This file contains the class Tree and ndtype Tree used in python
-#---------------------------------------------------------------------
+
+#-------------------------------------------------------------------
+# This file contains the class Tree and ndtype Tree used in Python.
+#-------------------------------------------------------------------
 
 class Tree(ctypes.Structure):
     _fields_ = [("species_name", ctypes.c_char_p),
@@ -29,8 +30,7 @@ class Tree(ctypes.Structure):
                 ("O3_removed_mass_yearly", ctypes.c_double),
                 ("O3_net_uptake_yearly", ctypes.c_double)]
 
-
-#Define the dtype for the NumPy array
+# Define the dtype for the NumPy array
 tree_dtype = np.dtype([
     ('species_name', np.object_),  # Use np.str_ for string data
     ('crown_height', np.float64),
