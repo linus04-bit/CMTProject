@@ -212,13 +212,21 @@ OFP_tot = np.sum(grid_OFP_np)
 PM10_tot = np.sum(grid_PM10_np)
 O3_tot = np.sum(grid_O3_np)
 O3_net_uptake_tot = np.sum(grid_O3_net_uptake_np)
-summary.write(f"Total amount of ozone emitted: {OFP_tot} kg/y\n")
+summary.write(f"Total amount of BVOC emitted: {OFP_tot} kg/y\n")
 summary.write(f"Total amount of PM10 absorbed: {PM10_tot} kg/y\n")
 summary.write(f"Total amount of ozone absorbed: {O3_tot} kg/y \n")
 summary.write(f"Total net ozone absorbed(+)/emitted(-): {O3_net_uptake_tot} kg/y\n")
+OFP_max = grid_OFP_np.max()
+PM10_max = grid_PM10_np.max()
+O3_max = grid_O3_np.max()
+O3_net_uptake_min = grid_O3_net_uptake_np.min()
+summary.write(f"Max amount of BVOC emitted for one gridcell: {OFP_max} kg/y\n")
+summary.write(f"Max amount of PM10 absorbed for one gridcell: {PM10_max} kg/y\n")
+summary.write(f"Max amount of ozone absorbed for one gridcell: {O3_max} kg/y\n")
+summary.write(f"Max amount of net ozone emitted for one gridcell: {O3_net_uptake_min} kg/y\n")
 #--------------------------------------visualization-------------------------------------------
 # OFP #
-plt.imshow(grid_OFP_np, origin='lower', cmap="YlGnBu", interpolation='nearest', norm = SymLogNorm(linthresh=10, vmin=0, vmax=grid_OFP_np.max())) #Symlognorm allows to depict the colors on a log scale, but not the values
+plt.imshow(grid_OFP_np, origin='lower', cmap="YlGnBu", interpolation='nearest', norm = SymLogNorm(linthresh=10, vmin=0, vmax=OFP_max)) #Symlognorm allows to depict the colors on a log scale, but not the values
 plt.title("Yearly Ozone Forming Potential (OFP) (kg/y)\n - grid based on indices")
 plt.xlabel("x-index")
 plt.ylabel("y-index")
@@ -230,7 +238,7 @@ plt.savefig(f'Results/OFP_map_{NR_LINES_GE}_indices.png')
 
 # PM10 # 
 plt.clf()
-plt.imshow(grid_PM10_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=1, vmin=0, vmax=grid_PM10_np.max()))
+plt.imshow(grid_PM10_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=1, vmin=0, vmax=PM10_max))
 plt.title("Yearly PM10 Deposition (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
@@ -241,7 +249,7 @@ plt.savefig(f'Results/PM10_map_{NR_LINES_GE}_indices.png')
 
 #O3_uptake
 plt.clf()
-plt.imshow(grid_O3_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=2, vmin=0, vmax=grid_O3_np.max()))
+plt.imshow(grid_O3_np, origin='lower', cmap='YlGnBu', interpolation='nearest', norm = SymLogNorm(linthresh=2, vmin=0, vmax=O3_max))
 plt.title("Yearly amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
@@ -251,7 +259,7 @@ plt.savefig(f'Results/O3_map_{NR_LINES_GE}_indices.png')
 
 # O3__net_uptake #
 plt.clf()
-plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='afmhot', interpolation= 'nearest',  norm = SymLogNorm(linthresh=10, vmin=grid_O3_net_uptake_np.min(), vmax=0))
+plt.imshow(grid_O3_net_uptake_np, origin='lower', cmap='afmhot', interpolation= 'nearest',  norm = SymLogNorm(linthresh=10, vmin=O3_net_uptake_min, vmax=0))
 plt.title("Yearly net amount of O3 absorbed (kg/y)\n - grid based on indices")
 plt.xlabel("x index")
 plt.ylabel("y index")
