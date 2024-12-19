@@ -15,13 +15,12 @@
 // This file contains the functions to read the CSV document with the trees in Geneva, as well as the functions to allocate and free memory.
 // -------------------------------------------------------------------------------------------------------------------------------------------
 
-
 // ---------------------------------------------------------------------------------------------------------------------------
 // my_strndup: This function is used within the readwriteDocument function to allocate memory for strings into the structure.
 // ---------------------------------------------------------------------------------------------------------------------------
 
 char *my_strndup(const char *str, size_t n) {
-    // Allocate memory for the substring + 1 for null terminator
+    // Allocate memory for the substring and for null terminator
     char *dup = malloc(n + 1);
     if (dup == NULL) {
         return NULL;  // Return NULL if malloc fails
@@ -34,8 +33,8 @@ char *my_strndup(const char *str, size_t n) {
 
 // -----------------------------------------------------------------------------------------------------------------------------------
 // readwriteDocument: This function opens the CSV file and saves the data about the trees into a predefined array of Tree structures.
-// Input: Filepath, allocated empty tree array, amount of trees for computations
-// Output: Nothing
+// Input: filepath, allocated empty tree array, amount of trees for computations
+// Output: nothing
 // -----------------------------------------------------------------------------------------------------------------------------------
 
 void readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // size_org is the length of the trees array and hence the amount of values we read in from the CSV file.
