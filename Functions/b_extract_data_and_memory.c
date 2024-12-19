@@ -37,7 +37,7 @@ char* my_strndup(const char* str, size_t n) {
 //Output: Nothing
 // -----------------------------------------------------------------------------------------------------------------------------------
 
-int readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // size_org is the length of the trees array and hence the amount of values we read in from the CSV file.
+void readwriteDocument(char *filename, struct Tree *trees, int size_org) {    // size_org is the length of the trees array and hence the amount of values we read in from the CSV file.
     // Open the CSV file
    FILE *file = fopen(filename, "r");
     if (file == NULL) {
