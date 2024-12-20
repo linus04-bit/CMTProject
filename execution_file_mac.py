@@ -156,13 +156,14 @@ conversion_factor = os.path.join(path,'Data/conversion_factor.csv')
 MIR = os.path.join(path,'Data/MIR.csv')
 
 # Launch filtration
+print("Filtering through array")
 np_filtered_trees = np.empty(0, dtype=tree_dtype)
 np_filtered_trees = filter_trees(np_trees, np_filtered_trees, conversion_factor, EF, Shading, MIR)
-
+print("Filtering done")
 # ---------------------------------------
 # Grid calculations / running main_func2
 # ---------------------------------------
-
+print("Starting calculations")
 size_filtered_trees = len(np_filtered_trees)
 summary.write(f"Amount of trees used for calculations: {size_filtered_trees}\n")
 
@@ -215,7 +216,7 @@ free_tree_array2(c_filtered_trees)
 # -----------------------------
 # Conversion for visualization
 # -----------------------------
-
+print("Starting visualization")
 # Convert Pointer(Pointer(double)) to a 2D array in Python
 rows = length_y.value
 cols = length_x.value
