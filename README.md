@@ -100,7 +100,8 @@ To reproduce the results depicted in the report, the following steps should be i
 2. Open the file "*execution_file_windows.py*" (Windows) or "*execution_file_mac.py*" (MacOS). The file contains commented instructions for the user to modify certain input parameters. Modify as desired and save the file. The values by default correspond to the values used in the report.
 
 3. The file mentioned above can now be run. It will automatically perform all calculations and save the plotted graphs to the directory "*Results*". For 120'000 trees, the program will take approximately 32 minutes:
-    For Windows:
+
+   For Windows:
 
     ```
     python3 execution_file_windows.py
